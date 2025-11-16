@@ -11,10 +11,6 @@ import { downloadNpcAsTxt, downloadNpcAsJson } from "@/lib/downloadNpc";
 import { FancySelect } from "@/components/FancySelect";
 import { setDefaultAutoSelectFamily } from "net";
 
-if (typeof window !== "undefined") {
-  throw new Error("Sentry test error from NPCRoll");
-}
-
 type Npc = {
   id: string;
   race: string;
