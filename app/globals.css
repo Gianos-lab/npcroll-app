@@ -62,11 +62,6 @@ body {
     center;
 
   background-attachment: fixed;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 2rem 1.5rem 1.5rem;
 }
 
 /* ─────────────────────────────────────────────
@@ -76,7 +71,6 @@ body {
 .shell {
   width: 100%;
   max-width: 1120px;
-  min-height: 760px; /* altezza minima per evitare “ballo” */
   background:
     radial-gradient(120% 140% at -20% -20%, rgba(58, 175, 169, 0.18), transparent 60%),
     linear-gradient(145deg, #f5fbfb, #e3f3f2);
@@ -84,12 +78,17 @@ body {
   border: 1px solid rgba(192, 221, 220, 0.95);
   box-shadow: 0 22px 60px rgba(0, 0, 0, 0.75);
   padding: 1.6rem 1.6rem 1.7rem;
+
   display: grid;
   grid-template-columns: minmax(0, 1.05fr) minmax(0, 1.3fr);
   gap: 1.6rem;
+
   opacity: 0;
   transform: translateY(14px) scale(0.98);
   animation: shell-in 600ms cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+
+  /* centrata orizzontalmente, ma non più verticalmente */
+  margin: 1.5rem auto 1.5rem;
 }
 
 @keyframes shell-in {
@@ -97,6 +96,7 @@ body {
     opacity: 0;
     transform: translateY(18px) scale(0.97);
   }
+
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
@@ -297,6 +297,7 @@ body {
     opacity: 0;
     transform: scaleY(0.9) translateY(-4px);
   }
+
   to {
     opacity: 1;
     transform: scaleY(1) translateY(0);
@@ -313,13 +314,32 @@ body {
   align-items: center;
   justify-content: center;
 
-  background: transparent;
-  border: none;
-  cursor: pointer;
-
   margin-left: auto;
   margin-right: auto;
   margin-top: 1.3rem;
+
+  padding: 0.5rem 1.6rem 0.7rem;
+  border-radius: 999px;
+  border: 1px solid rgba(192, 221, 220, 0.95);
+  background: rgba(245, 251, 251, 0.98);
+  box-shadow: 0 12px 26px rgba(15, 31, 34, 0.55);
+
+  cursor: pointer;
+  transition:
+    transform 150ms ease,
+    box-shadow 150ms ease,
+    background-color 150ms ease;
+}
+
+.roll-big:not(:disabled):hover {
+  transform: translateY(-1px);
+  background-color: #f0fbfb;
+  box-shadow: 0 16px 32px rgba(15, 31, 34, 0.65);
+}
+
+.roll-big:not(:disabled):active {
+  transform: translateY(1px) scale(0.98);
+  box-shadow: 0 8px 18px rgba(15, 31, 34, 0.4);
 }
 
 .roll-big:disabled {
@@ -352,6 +372,7 @@ body {
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
@@ -373,7 +394,8 @@ body {
 .right {
   padding-left: 0.25rem;
   display: flex;
-  align-items: flex-start; /* card agganciata in alto */
+  align-items: flex-start;
+  /* card agganciata in alto */
   justify-content: center;
 }
 
@@ -400,6 +422,7 @@ body {
     opacity: 0;
     transform: translateY(14px) scale(0.985);
   }
+
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
@@ -554,6 +577,7 @@ body {
   font-size: 0.9rem;
   margin-top: 0.5rem;
   color: var(--text-muted);
+  font-family: "Lora", serif;
 }
 
 /* Loading spinner */
@@ -618,24 +642,31 @@ body {
 
 @media (max-width: 900px) {
   body {
-    padding: 1.25rem 1rem 1.25rem;
+    margin: 0;
+    padding: 0.75rem;
   }
 
   .shell {
-    grid-template-columns: 1fr;
-    padding: 1.3rem 1.1rem 1.4rem;
-    min-height: 0; /* su mobile lasciamo adattare */
+    width: 100%;
+    max-width: 1120px;
+    display: grid;
+    grid-template-columns: 1fr;  /* left sopra, right sotto */
+    padding: 1rem;
+    margin: 0 auto 1rem;
+    min-height: auto;
+    height: auto;
   }
 
   .left {
     border-right: none;
     border-bottom: 1px solid rgba(192, 221, 220, 0.9);
     padding-right: 0;
-    padding-bottom: 1.4rem;
+    padding-bottom: 1.1rem;
   }
 
   .right {
     padding-left: 0;
+    padding-top: 1rem;
     justify-content: center;
   }
 
@@ -645,16 +676,256 @@ body {
 
   .hero-text {
     font-size: 0.88rem;
+    margin-top: 0.7rem;
   }
 
   .npc-card {
-    min-height: 0; /* su mobile la card può essere più libera */
+    min-height: 0;
   }
 
   .site-footer {
-    margin-top: 1.4rem;
-    padding: 0.9rem 0.2rem 0.6rem;
+    margin-top: 0.5rem;
+    padding: 0.8rem 0.2rem 0.6rem;
     font-size: 0.85rem;
-    text-align: center; /* su mobile sta meglio centrato */
+    text-align: center;
+  }
+
+  .npc-button {
+    width: 100%;
+    max-width: 260px;
+    height: 50px;
+    font-size: 0.95rem;
+    margin-top: 0.9rem;
   }
 }
+
+  .npc-button span {
+    font-size: 0.9rem;
+  }
+
+  .npc-button .icon img {
+    width: 26px;
+    height: 26px;
+  }
+
+  .npc-button:hover .icon img {
+    width: 32px;
+    height: 32px;
+  }
+
+.feedback-button {
+  transition: all 0.25s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.feedback-button:hover {
+  transform: scale(1.03);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
+  background-color: #0F1A1D;
+  /* un po' più scuro del #17252A */
+}
+
+.button-copy {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  background-color: #e3f3f2;
+  border: 2px solid #17252A;
+  color: #17252A;
+
+  font-family: "Germania One", serif;
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+
+  padding: 0.45rem 1.3rem;
+  border-radius: 10px;
+
+  cursor: pointer;
+  user-select: none;
+  text-decoration: none;
+
+  transition: transform 0.15s ease-out;
+}
+
+/* effetto stile “button-56” */
+.button-copy::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: #17252A;
+  border-radius: 10px;
+
+  /* ombra staccata */
+  transform: translate(6px, 6px);
+  transition: transform 0.2s ease-out;
+
+  z-index: -1;
+}
+
+/* hover – ombra più vicina */
+.button-copy:hover::after {
+  transform: translate(0px, 0px);
+}
+
+/* click – leggero schiacciamento */
+.button-copy:active {
+  transform: translateY(1px) scale(0.98);
+}
+
+.button-copy:after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: #17252A;
+
+  border-radius: 10px;
+  transform: translate(6px, 6px);
+  transition: transform 150ms ease;
+
+  z-index: -1;
+}
+
+.button-copy:hover:after {
+  transform: translate(0px, 0px);
+}
+
+.button-copy:active {
+  transform: translate(1px, 1px);
+}
+
+  /* Roll NPC button - versione mobile */
+  .npc-button {
+    width: 100%;
+    max-width: 260px;
+    height: 50px;
+    font-size: 0.95rem;
+    margin-top: 1rem;
+  }
+
+  .npc-button span {
+    font-size: 0.9rem;
+  }
+
+  .npc-button .icon img {
+    width: 26px;
+    height: 26px;
+  }
+
+  .npc-button:hover .icon img {
+    width: 32px;
+    height: 32px;
+  }
+
+/* ----------------------------------------------------------
+   NPCRoll Super Button
+---------------------------------------------------------- */
+.npc-button {
+  position: relative;
+  display: block;
+  width: 220px;
+  height: 56px;
+
+  margin: 16px auto 0;
+  background-color: #17252A;
+  color: #F2FFFD;
+
+  border-radius: 10px;
+  box-shadow: 0 0 18px rgba(0, 0, 0, 0.35);
+
+  cursor: pointer;
+  overflow: hidden;
+  font-family: "Germania One", serif;
+  font-size: 1.05rem;
+  letter-spacing: 0.08em;
+
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+/* effetto “button-56” con ombra spostata */
+.npc-button::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 10px;
+  background-color: #0b1517;
+  transform: translate(6px, 6px);
+  z-index: -1;
+  transition: transform 0.2s ease-out;
+}
+
+.npc-button:hover::after {
+  transform: translate(0, 0);
+}
+
+/* layout interno: testo + dado */
+.npc-button span,
+.npc-button .icon {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.npc-button span {
+  left: 0;
+  width: 72%;
+  transition: all 0.25s cubic-bezier(0.31, -0.105, 0.43, 1.4);
+}
+
+/* divisore più leggero */
+.npc-button span::after {
+  content: "";
+  position: absolute;
+  right: -6px;
+  top: 22%;
+  width: 1px;
+  height: 56%;
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 2px;
+}
+
+.npc-button .icon {
+  right: 0;
+  width: 28%;
+  transition: all 0.25s cubic-bezier(0.31, -0.105, 0.43, 1.4);
+}
+
+.npc-button .icon img {
+  width: 30px;
+  height: 30px;
+  transition: inherit;
+}
+
+/* 🔁 slide: via il testo, entra il dado */
+.npc-button:hover span {
+  left: -72%;
+  opacity: 0;
+}
+
+.npc-button:hover .icon {
+  width: 100%;
+}
+
+.npc-button:hover .icon img {
+  width: 40px;
+  height: 40px;
+  transform: rotate(10deg);
+}
+
+/* click: bottone schiacciato, niente color-change */
+.npc-button:active {
+  transform: translate(1px, 1px) scale(0.97);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+/* d20 in loading */
+.loading-die {
+  width: 40px;
+  height: 40px;
+  margin-bottom: 4px;
+  animation: roll-spin 0.9s linear infinite;
+}
+

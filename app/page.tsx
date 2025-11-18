@@ -7,9 +7,7 @@ import {
   getAllSexes,
   getAllAlignments,
 } from "@/lib/npcRepository";
-import { downloadNpcAsTxt, downloadNpcAsJson } from "@/lib/downloadNpc";
 import { FancySelect } from "@/components/FancySelect";
-import { setDefaultAutoSelectFamily } from "net";
 
 type Npc = {
   id: string;
@@ -36,6 +34,8 @@ const LOADING_MESSAGES = [
   "Rolling behind the DM screen…",
   "Finding someone interesting at the tavern…",
   "Bribing goblins for extra info…",
+  "Brewing a fresh batch of trouble…",
+  "Asking the barkeep about the regulars…",
 ];
 
 async function rollNpcRequest(params: {
@@ -65,14 +65,13 @@ async function rollNpcRequest(params: {
         message = (data as any).error;
       }
     } catch {
-      // ignore
+      // ignore parse errors
     }
     throw new Error(message);
   }
 
   const npc = (await res.json()) as Npc;
 
-  // minimo tempo per far “godere” il loading
   const MIN_DELAY_MS = 1500;
   const elapsed = Date.now() - start;
   if (elapsed < MIN_DELAY_MS) {
@@ -92,6 +91,7 @@ export default function Home() {
     "Generating your NPC…"
   );
   const [hasRolled, setHasRolled] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   const mutation = useMutation({
     mutationFn: rollNpcRequest,
@@ -101,7 +101,6 @@ export default function Home() {
   const isPending = mutation.isPending;
   const error = mutation.error as Error | null;
 
-  // ── Gestione stati della card ───────────────────────────
   const showEmpty = !hasRolled && !isPending && !npc && !error;
   const showLoading = isPending;
   const showNpc = !!npc && !isPending;
@@ -116,10 +115,46 @@ export default function Home() {
     mutation.mutate({ race, sex, alignment });
   }
 
+function handleCopyToClipboard(npc: Npc) {
+  const textBlock = [
+    `${npc.name} ${npc.surname}`,
+    `${npc.race} • ${npc.sex} • ${npc.alignment}`,
+    "",
+    `Description: ${npc.description}`,
+    `Personality: ${npc.personality}`,
+    `History: ${npc.history}`,
+    `Motivation: ${npc.motivation}`,
+    `Voice: ${npc.voice}`,
+    "",
+    "Hooks:",
+    ...npc.hooks.map((h) => `- ${h}`),
+    "",
+    "Lines:",
+    ...npc.lines.map((l) => `"${l}"`),
+  ].join("\n");
+
+  try {
+    const el = document.createElement("textarea");
+    el.value = textBlock;
+    el.style.position = "fixed";
+    el.style.top = "-9999px";
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand("copy");
+    document.body.removeChild(el);
+
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1500);
+
+  } catch (err) {
+    console.error("Copy failed", err);
+    setCopied(false);
+  }
+}
+
   return (
     <>
       <div className="shell">
-        {/* LEFT COLUMN */}
         <section className="left">
           <header>
             <div className="brand-row">
@@ -129,28 +164,25 @@ export default function Home() {
             </div>
 
             <p className="hero-text">
-              Drop-in ready NPCs for busy Dungeon Masters. NPCRoll is a curated
-              library of 2,520 handcrafted characters from 14 fantasy races,
-              each with unique backstories, motivations, and narrative hooks.
-              Pick your parameters, hit <strong>Roll NPC</strong>, and drop a
-              fully playable character into your session in seconds.
+              Need a character on the fly? Can&apos;t find inspiration for that
+              backstory NPC? We&apos;ve got thousands brewing. Pick your filters,
+              roll the dice, and summon a curated NPC for your 5e campaign. Each
+              comes with personality, backstory, motivations, voice, hooks and
+              dialogue lines. That&apos;s it.
             </p>
           </header>
 
           <div className="form-card">
-            {/* RACE */}
             <div className="field">
               <label>RACE</label>
               <FancySelect value={race} onChange={setRace} options={RACES} />
             </div>
 
-            {/* SEX */}
             <div className="field">
               <label>SEX</label>
               <FancySelect value={sex} onChange={setSex} options={SEXES} />
             </div>
 
-            {/* ALIGNMENT */}
             <div className="field">
               <label>ALIGNMENT</label>
               <FancySelect
@@ -161,150 +193,165 @@ export default function Home() {
             </div>
           </div>
 
-          <button
-            className="roll-big"
-            type="button"
-            onClick={handleRoll}
-            disabled={isPending}
+          <div
+            style={{
+              width: "100%",
+              display: "flex",
+              justifyContent: "center",
+              marginTop: "1.1rem",
+            }}
           >
-            <img src="/roll.svg" alt="" className="roll-big-die" />
-            <span className="roll-big-label">ROLL NPC</span>
-          </button>
+            <button
+              className="npc-button"
+              type="button"
+              onClick={handleRoll}
+            >
+              <span>ROLL NPC</span>
+              <div className="icon">
+                <img src="/roll.svg" alt="Roll d20" />
+              </div>
+            </button>
+
+          </div>
         </section>
 
-        {/* RIGHT COLUMN */}
         <section className="right">
-          <article className="npc-card">
-            <div className="npc-inner">
-              {showEmpty && (
-                <div className="empty-state">
-                  <img src="/roll.svg" alt="" className="empty-die" />
-                  <p className="empty-title">No NPC has been summoned yet.</p>
-                </div>
-              )}
-
-              {showLoading && (
-                <div className="loading-state">
-                  <div className="spinner" />
-                  <p className="loading-text">{loadingMessage}</p>
-                </div>
-              )}
-
-              {showError && (
-                <div className="error-state">
-                  <p className="error-title">
-                    The tavern is empty for those filters.
-                  </p>
-                  <p className="error-body">
-                    The goblins couldn&apos;t find anyone with that vibe. Try
-                    changing <strong>Race</strong> or{" "}
-                    <strong>Alignment</strong>, or set one of the filters back
-                    to <strong>Random</strong> and roll again.
-                  </p>
-                </div>
-              )}
-
-              {showNpc && npc && (
-                <>
-                  <header className="npc-header">
-                    <div className="npc-header-row">
-                      <div className="npc-title-block">
-                        <h2 className="npc-name">
-                          {npc.name} {npc.surname}
-                        </h2>
-                        <p className="npc-meta">
-                          {npc.race} • {npc.sex} • {npc.alignment}
-                        </p>
-                      </div>
-
-                      <div className="download-links download-links--top">
-                        <button
-                          type="button"
-                          className="download-link"
-                          onClick={() => downloadNpcAsTxt(npc)}
-                        >
-                          TXT
-                        </button>
-                        <button
-                          type="button"
-                          className="download-link"
-                          onClick={() => downloadNpcAsJson(npc)}
-                        >
-                          JSON
-                        </button>
-                      </div>
-                    </div>
-                  </header>
-
-                  <section className="section">
-                    <h3 className="section-title">DESCRIPTION</h3>
-                    <p className="section-body">{npc.description}</p>
-                  </section>
-
-                  <section className="section">
-                    <h3 className="section-title">PERSONALITY</h3>
-                    <p className="section-body">{npc.personality}</p>
-                  </section>
-
-                  <section className="section">
-                    <h3 className="section-title">HISTORY</h3>
-                    <p className="section-body">{npc.history}</p>
-                  </section>
-
-                  <section className="section">
-                    <h3 className="section-title">MOTIVATION</h3>
-                    <p className="section-body">{npc.motivation}</p>
-                  </section>
-
-                  <section className="section">
-                    <h3 className="section-title">VOICE</h3>
-                    <p className="section-body">{npc.voice}</p>
-                  </section>
-
-                  <section className="section">
-                    <h3 className="section-title">HOOKS</h3>
-                    <ul className="hooks">
-                      {npc.hooks.map((hook, idx) => (
-                        <li key={idx}>{hook}</li>
-                      ))}
-                    </ul>
-                  </section>
-
-                  <section className="section">
-                    <h3 className="section-title">LINES</h3>
-                    {npc.lines.map((line, idx) => (
-                      <p key={idx} className="quote">
-                        “{line}”
-                      </p>
-                    ))}
-                  </section>
-                </>
-              )}
+          {showEmpty ? (
+            <div
+              className="empty-state"
+              style={{
+                flex: 1,
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                textAlign: "center",
+                paddingTop: "40px",
+              }}
+            >
+              <img
+                src="/roll_white.svg"
+                alt="d20"
+                style={{
+                  width: "48px",
+                  height: "48px",
+                  marginBottom: "12px",
+                  opacity: 0.9,
+                }}
+              />
+              <p className="empty-title" style={{ fontSize: "0.95rem" }}>
+                No NPC has been summoned yet.
+              </p>
             </div>
-          </article>
+          ) : (
+            <article
+              className="npc-card"
+              key={npc ? npc.id : showLoading ? "loading" : "empty"}
+            >
+              <div className="npc-inner">
+                {showLoading && (
+                  <div className="loading-state">
+                    <img
+                      src="/roll_white.svg"
+                      alt=""
+                      className="loading-die"
+                    />
+                    <p className="loading-text">{loadingMessage}</p>
+                  </div>
+                )}
+
+                {showError && (
+                  <div className="error-state">
+                    <p className="error-title">
+                      The tavern is empty for those filters.
+                    </p>
+                    <p className="error-body">
+                      The goblins couldn&apos;t find anyone with that vibe. Try
+                      changing <strong>Race</strong> or{" "}
+                      <strong>Alignment</strong>, or set one of the filters
+                      back to <strong>Random</strong> and roll again.
+                    </p>
+                  </div>
+                )}
+
+                {showNpc && npc && (
+                  <>
+                    <header className="npc-header">
+                      <div className="npc-header-row">
+                        <div className="npc-title-block">
+                          <h2 className="npc-name">
+                            {npc.name} {npc.surname}
+                          </h2>
+                          <p className="npc-meta">
+                            {npc.race} • {npc.sex} • {npc.alignment}
+                          </p>
+                        </div>
+
+                          <button
+                            className={`button-copy ${copied ? "copied" : ""}`}
+                            onClick={() => handleCopyToClipboard(npc)}
+                          >
+                            {copied ? "Copied!" : "Copy NPC"}
+                          </button>
+
+                      </div>
+                    </header>
+
+                    <section className="section">
+                      <h3 className="section-title">DESCRIPTION</h3>
+                      <p className="section-body">{npc.description}</p>
+                    </section>
+
+                    <section className="section">
+                      <h3 className="section-title">PERSONALITY</h3>
+                      <p className="section-body">{npc.personality}</p>
+                    </section>
+
+                    <section className="section">
+                      <h3 className="section-title">HISTORY</h3>
+                      <p className="section-body">{npc.history}</p>
+                    </section>
+
+                    <section className="section">
+                      <h3 className="section-title">MOTIVATION</h3>
+                      <p className="section-body">{npc.motivation}</p>
+                    </section>
+
+                    <section className="section">
+                      <h3 className="section-title">VOICE</h3>
+                      <p className="section-body">{npc.voice}</p>
+                    </section>
+
+                    <section className="section">
+                      <h3 className="section-title">HOOKS</h3>
+                      <ul className="hooks">
+                        {npc.hooks.map((hook, idx) => (
+                          <li key={idx}>{hook}</li>
+                        ))}
+                      </ul>
+                    </section>
+
+                    <section className="section">
+                      <h3 className="section-title">LINES</h3>
+                      {npc.lines.map((line, idx) => (
+                        <p key={idx} className="quote">
+                          “{line}”
+                        </p>
+                      ))}
+                    </section>
+                  </>
+                )}
+              </div>
+            </article>
+          )}
         </section>
       </div>
 
-      {/* FOOTER FISSO CON FEEDBACK */}
-      <footer className="site-footer">
-        <p className="footer-text">
-          Help evolve NPCRoll.com by filling out this{" "}
-          <a
-            href="https://example.com/feedback"
-            target="_blank"
-            rel="noreferrer"
-          >
-            short feedback form
-          </a>
-          , or reach out on{" "}
-          <a href="https://reddit.com" target="_blank" rel="noreferrer">
-            Reddit
-          </a>{" "}
-          or{" "}
-          <a href="https://discord.com" target="_blank" rel="noreferrer">
-            Discord
-          </a>{" "}
-          to share what you&apos;d love to see next.
+      <footer className="site-footer text-center">
+        <p className="footer-text text-center">
+          Got feedback? Share it through our quick{" "}
+          <a href="/feedback">feedback form</a> — every idea helps make NPCRoll
+          better.
         </p>
       </footer>
     </>
