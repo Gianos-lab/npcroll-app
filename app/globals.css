@@ -1,3 +1,5 @@
+
+
 /* 1️⃣ Font */
 @import url("https://fonts.googleapis.com/css2?family=Germania+One&family=Lora:wght@400;500;600&display=swap");
 
@@ -5,6 +7,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
 
 /* ─────────────────────────────────────────────
    Theme tokens
