@@ -189,6 +189,32 @@ export default function FeedbackPage() {
             We only use this information to improve NPCRoll. No newsletters, no
             spam.
           </p>
+                <div
+                    style={{
+                        textAlign: "left",
+                        marginBottom: "1px",    // SPAZIO EXTRA
+                        marginTop: "36px",        // un leggero distacco dal top della card
+                    }}
+                >
+                    <a
+                        href="/"
+                        style={{
+                            display: "inline-flex",
+                            alignItems: "center",
+                            gap: "8px",
+                            color: "#2B7A78",           // palette teal
+                            textDecoration: "none",
+                            fontFamily: "'Lora', serif",
+                            fontSize: "1rem",
+                            transition: "opacity 0.2s",
+                        }}
+                        onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.8")}
+                        onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
+                    >
+                        <span style={{ fontSize: "1.25rem" }}>←</span>
+                        Back to NPCRoll
+                    </a>
+                </div>
         </form>
       </div>
     </main>

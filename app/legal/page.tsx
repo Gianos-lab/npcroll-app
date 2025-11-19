@@ -436,7 +436,7 @@ export default function LegalPage() {
                 <div
                     style={{
                         textAlign: "left",
-                        marginBottom: "24px",    // SPAZIO EXTRA
+                        marginBottom: "1px",    // SPAZIO EXTRA
                         marginTop: "36px",        // un leggero distacco dal top della card
                     }}
                 >
