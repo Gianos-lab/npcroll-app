@@ -38,15 +38,17 @@ export default function FeedbackThanksPage() {
     border: "none",
     background: "#17252A",
     color: "#F2FFFD",
-    fontFamily: "'Lora', serif",
+    fontFamily: "'Germania One', serif",
     fontWeight: 600,
     fontSize: "0.95rem",
     cursor: "pointer",
     textDecoration: "none",
+    letterSpacing: "0.06em",
     boxShadow: "0 6px 20px rgba(0, 0, 0, 0.4)",
   } as const;
 
   return (
+    <div className="page-root">
     <main
       style={{
         height: "100vh",
@@ -76,10 +78,11 @@ export default function FeedbackThanksPage() {
         </p>
 
         <a href="/" style={buttonStyle} className="feedback-button">
-          Back to NPCRoll
+          BACK TO NPCROLL
         </a>
       </div>
 
     </main>
+    </div>
   );
 }

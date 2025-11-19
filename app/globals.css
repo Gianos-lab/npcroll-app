@@ -1,5 +1,3 @@
-
-
 /* 1️⃣ Font */
 @import url("https://fonts.googleapis.com/css2?family=Germania+One&family=Lora:wght@400;500;600&display=swap");
 
@@ -941,4 +939,15 @@ body {
   height: 40px;
   margin-bottom: 4px;
   animation: roll-spin 0.9s linear infinite;
+}
+
+.page-root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* fa sì che il blocco centrale occupi lo spazio e spinga il footer giù */
+.page-root .shell {
+  flex: 1;
 }

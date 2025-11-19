@@ -95,6 +95,7 @@ export default function LegalPage() {
     };
 
     return (
+        <div className="page-root">
         <main
             style={{
                 minHeight: "100vh",
@@ -428,7 +429,7 @@ export default function LegalPage() {
                 </section>
 
                 <p style={smallMuted}>
-                    Last updated: 2025. If you have any questions about these policies,
+                    Last updated: November 2025. If you have any questions about these policies,
                     you can reach us at{" "}
                     <a href="mailto:gianosdm@gmail.com">gianosdm@gmail.com</a>.
                 </p>
@@ -465,5 +466,6 @@ export default function LegalPage() {
 
 
         </main>
+        </div>
     );
 }

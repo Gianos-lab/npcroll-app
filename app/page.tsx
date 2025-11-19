@@ -153,7 +153,7 @@ export default function Home() {
   }
 
   return (
-    <>
+    <div className="page-root">
       <div className="shell">
         <section className="left">
           <header>
@@ -349,59 +349,34 @@ export default function Home() {
 
       <footer
         style={{
-          marginTop: "1px",
-          padding: "16px 0 16px",
+          marginTop: "16px",
+          padding: "10px 0 10px",
           textAlign: "center",
           fontFamily: "'Lora', serif",
-          lineHeight: 1.6,
-          color: "#DEF2F1",         // testo chiaro e leggibile
-          fontSize: "0.95rem",
+          fontSize: "0.9rem",
+          color: "#DEF2F1",
+          opacity: 0.9,
         }}
       >
-
-        {/* Feedback */}
-        <p style={{ marginBottom: "10px" }}>
-          Got feedback? Share it through our quick{" "}
-          <a href="/feedback" style={{ textDecoration: "underline", color: "#3AAFA9" }}>
-            feedback form
-          </a>{" "}
-          — every idea helps make NPCRoll better.
-        </p>
-
-        {/* Legal link */}
-        <p style={{ marginBottom: "8px" }}>
+        <span>
+          Got feedback?{" "}
+          <a
+            href="/feedback"
+            style={{ color: "#3AAFA9", textDecoration: "underline" }}
+          >
+            Send it here
+          </a>
+          {" "}
+          ·{" "}
           <a
             href="/legal"
-            style={{
-              textDecoration: "none",
-              fontWeight: 600,
-              color: "#3AAFA9",        // teal accent
-            }}
+            style={{ color: "#3AAFA9", textDecoration: "none", fontWeight: 600 }}
           >
-            Legal &amp; Policies
+            Legal & Policies
           </a>
-        </p>
-
-        {/* Disclaimer */}
-        <p
-          style={{
-            marginTop: "6px",
-            fontSize: "0.85rem",
-            color: "#BCD9D7",           // leggermente più tenue ma visibile
-            maxWidth: "640px",
-            marginLeft: "auto",
-            marginRight: "auto",
-            lineHeight: 1.4,
-          }}
-        >
-          NPCRoll is not affiliated with Wizards of the Coast. This tool uses only
-          content released within the 5e System Reference Document (5.1/5.2). All
-          other content is original.
-        </p>
-
+        </span>
       </footer>
 
-
-    </>
+    </div>
   );
 }

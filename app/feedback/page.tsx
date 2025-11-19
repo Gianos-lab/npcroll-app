@@ -32,12 +32,17 @@ export default function FeedbackPage() {
   const labelStyle = {
     display: "block",
     fontSize: "0.95rem",
-    letterSpacing: "0.14em",
+    letterSpacing: "0.05em",
     textTransform: "uppercase" as const,
     fontWeight: 700,
     marginBottom: "0.35rem",
     color: "#13292A",
     fontFamily: "'Germania One', serif",
+
+
+
+
+    
   };
 
   const inputBase = {
@@ -70,9 +75,10 @@ export default function FeedbackPage() {
     background: "#17252A",
     color: "#F2FFFD",
     fontWeight: 600,
-    fontSize: "0.95rem",
+    fontSize: "0.9rem",
     cursor: "pointer",
-    fontFamily: "'Lora', serif",
+    fontFamily: "'Germania One', serif",
+    letterSpacing: "0.05em",
     boxShadow: "0 6px 20px rgba(0, 0, 0, 0.35)",
   } as const;
 
@@ -85,6 +91,7 @@ export default function FeedbackPage() {
   } as const;
 
   return (
+    <div className="page-root">
     <main
       style={{
         minHeight: "100vh",
@@ -142,7 +149,7 @@ export default function FeedbackPage() {
 
           <div style={{ marginBottom: "1.3rem" }}>
             <label htmlFor="mind" style={labelStyle}>
-              What&apos;s on your mind?
+              What&apos;s on your mind? <span style={{ color: "#13292A" }}>*</span>
             </label>
             <textarea
               id="mind"
@@ -182,7 +189,7 @@ export default function FeedbackPage() {
           </div>
 
           <button type="submit" style={buttonStyle} className="feedback-button">
-            Send Feedback
+            SEND FEEDBACK
           </button>
 
           <p style={smallTextStyle}>
@@ -218,5 +225,6 @@ export default function FeedbackPage() {
         </form>
       </div>
     </main>
+    </div>
   );
 }
