@@ -94,7 +94,8 @@ export default function FeedbackPage() {
         justifyContent: "center",
       }}
     >
-      <div style={cardStyle}>
+
+      <div className="fade-in-card" style={cardStyle}>
         <header style={{ textAlign: "center" }}>
           <a
             href="/"

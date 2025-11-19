@@ -429,6 +429,13 @@ body {
   }
 }
 
+/* Fade-in helper for other panels (feedback, legal, etc.) */
+.fade-in-card {
+  opacity: 0;
+  transform: translateY(10px) scale(0.99);
+  animation: card-in 550ms cubic-bezier(0.22, 0.61, 0.36, 1) 120ms forwards;
+}
+
 .npc-card::before {
   content: "";
   position: absolute;
@@ -698,7 +705,7 @@ body {
     margin-top: 0.9rem;
   }
 }
-
+  
   .npc-button span {
     font-size: 0.9rem;
   }
@@ -928,4 +935,3 @@ body {
   margin-bottom: 4px;
   animation: roll-spin 0.9s linear infinite;
 }
-

@@ -115,42 +115,42 @@ export default function Home() {
     mutation.mutate({ race, sex, alignment });
   }
 
-function handleCopyToClipboard(npc: Npc) {
-  const textBlock = [
-    `${npc.name} ${npc.surname}`,
-    `${npc.race} • ${npc.sex} • ${npc.alignment}`,
-    "",
-    `Description: ${npc.description}`,
-    `Personality: ${npc.personality}`,
-    `History: ${npc.history}`,
-    `Motivation: ${npc.motivation}`,
-    `Voice: ${npc.voice}`,
-    "",
-    "Hooks:",
-    ...npc.hooks.map((h) => `- ${h}`),
-    "",
-    "Lines:",
-    ...npc.lines.map((l) => `"${l}"`),
-  ].join("\n");
+  function handleCopyToClipboard(npc: Npc) {
+    const textBlock = [
+      `${npc.name} ${npc.surname}`,
+      `${npc.race} • ${npc.sex} • ${npc.alignment}`,
+      "",
+      `Description: ${npc.description}`,
+      `Personality: ${npc.personality}`,
+      `History: ${npc.history}`,
+      `Motivation: ${npc.motivation}`,
+      `Voice: ${npc.voice}`,
+      "",
+      "Hooks:",
+      ...npc.hooks.map((h) => `- ${h}`),
+      "",
+      "Lines:",
+      ...npc.lines.map((l) => `"${l}"`),
+    ].join("\n");
 
-  try {
-    const el = document.createElement("textarea");
-    el.value = textBlock;
-    el.style.position = "fixed";
-    el.style.top = "-9999px";
-    document.body.appendChild(el);
-    el.select();
-    document.execCommand("copy");
-    document.body.removeChild(el);
+    try {
+      const el = document.createElement("textarea");
+      el.value = textBlock;
+      el.style.position = "fixed";
+      el.style.top = "-9999px";
+      document.body.appendChild(el);
+      el.select();
+      document.execCommand("copy");
+      document.body.removeChild(el);
 
-    setCopied(true);
-    setTimeout(() => setCopied(false), 1500);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
 
-  } catch (err) {
-    console.error("Copy failed", err);
-    setCopied(false);
+    } catch (err) {
+      console.error("Copy failed", err);
+      setCopied(false);
+    }
   }
-}
 
   return (
     <>
@@ -287,12 +287,12 @@ function handleCopyToClipboard(npc: Npc) {
                           </p>
                         </div>
 
-                          <button
-                            className={`button-copy ${copied ? "copied" : ""}`}
-                            onClick={() => handleCopyToClipboard(npc)}
-                          >
-                            {copied ? "Copied!" : "Copy NPC"}
-                          </button>
+                        <button
+                          className={`button-copy ${copied ? "copied" : ""}`}
+                          onClick={() => handleCopyToClipboard(npc)}
+                        >
+                          {copied ? "Copied!" : "Copy NPC"}
+                        </button>
 
                       </div>
                     </header>
@@ -347,13 +347,61 @@ function handleCopyToClipboard(npc: Npc) {
         </section>
       </div>
 
-      <footer className="site-footer text-center">
-        <p className="footer-text text-center">
+      <footer
+        style={{
+          marginTop: "1px",
+          padding: "16px 0 16px",
+          textAlign: "center",
+          fontFamily: "'Lora', serif",
+          lineHeight: 1.6,
+          color: "#DEF2F1",         // testo chiaro e leggibile
+          fontSize: "0.95rem",
+        }}
+      >
+
+        {/* Feedback */}
+        <p style={{ marginBottom: "10px" }}>
           Got feedback? Share it through our quick{" "}
-          <a href="/feedback">feedback form</a> — every idea helps make NPCRoll
-          better.
+          <a href="/feedback" style={{ textDecoration: "underline", color: "#3AAFA9" }}>
+            feedback form
+          </a>{" "}
+          — every idea helps make NPCRoll better.
         </p>
+
+        {/* Legal link */}
+        <p style={{ marginBottom: "8px" }}>
+          <a
+            href="/legal"
+            style={{
+              textDecoration: "none",
+              fontWeight: 600,
+              color: "#3AAFA9",        // teal accent
+            }}
+          >
+            Legal &amp; Policies
+          </a>
+        </p>
+
+        {/* Disclaimer */}
+        <p
+          style={{
+            marginTop: "6px",
+            fontSize: "0.85rem",
+            color: "#BCD9D7",           // leggermente più tenue ma visibile
+            maxWidth: "640px",
+            marginLeft: "auto",
+            marginRight: "auto",
+            lineHeight: 1.4,
+          }}
+        >
+          NPCRoll is not affiliated with Wizards of the Coast. This tool uses only
+          content released within the 5e System Reference Document (5.1/5.2). All
+          other content is original.
+        </p>
+
       </footer>
+
+
     </>
   );
 }

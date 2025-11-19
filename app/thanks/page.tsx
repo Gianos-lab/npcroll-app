@@ -56,7 +56,8 @@ export default function FeedbackThanksPage() {
         padding: "0 16px",
       }}
     >
-      <div style={cardStyle}>
+
+        <div className="fade-in-flat" style={cardStyle}>
         <img
           src="/logo.svg"
           alt="NPCRoll Logo"
@@ -78,6 +79,7 @@ export default function FeedbackThanksPage() {
           Back to NPCRoll
         </a>
       </div>
+
     </main>
   );
 }
