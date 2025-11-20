@@ -170,6 +170,7 @@ export default function Home() {
               comes with personality, backstory, motivations, voice, hooks and
               dialogue lines. That&apos;s it.
             </p>
+
           </header>
 
           <div className="form-card">
@@ -359,20 +360,48 @@ export default function Home() {
         }}
       >
         <span>
-          Got feedback?{" "}
           <a
             href="/feedback"
-            style={{ color: "#3AAFA9", textDecoration: "underline" }}
+            style={{
+              color: "#3AAFA9",
+              textDecoration: "none",
+              fontWeight: 600,
+              transition: "color 0.2s ease",
+            }}
+            onMouseEnter={(e) => (e.currentTarget.style.color = "#66D3CC")}
+            onMouseLeave={(e) => (e.currentTarget.style.color = "#3AAFA9")}
           >
-            Send it here
+            Feedback
+          </a>
+          {" "}
+          ·{" "}
+          <a
+            href="/roadmap"
+            style={{
+              color: "#3AAFA9",
+              textDecoration: "none",
+              fontWeight: 600,
+              transition: "color 0.2s ease",
+            }}
+            onMouseEnter={(e) => (e.currentTarget.style.color = "#66D3CC")}
+            onMouseLeave={(e) => (e.currentTarget.style.color = "#3AAFA9")}
+          >
+            Roadmap
           </a>
           {" "}
           ·{" "}
           <a
             href="/legal"
-            style={{ color: "#3AAFA9", textDecoration: "none", fontWeight: 600 }}
+            style={{
+              color: "#3AAFA9",
+              textDecoration: "none",
+              fontWeight: 600,
+              transition: "color 0.2s ease",
+            }}
+            onMouseEnter={(e) => (e.currentTarget.style.color = "#66D3CC")}
+            onMouseLeave={(e) => (e.currentTarget.style.color = "#3AAFA9")}
           >
-            Legal & Policies
+            Legal
           </a>
         </span>
       </footer>

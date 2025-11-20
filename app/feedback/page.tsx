@@ -32,7 +32,7 @@ export default function FeedbackPage() {
   const labelStyle = {
     display: "block",
     fontSize: "0.95rem",
-    letterSpacing: "0.05em",
+    letterSpacing: "0.06em",
     textTransform: "uppercase" as const,
     fontWeight: 700,
     marginBottom: "0.35rem",
