@@ -1,36 +1,123 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# NPCRoll  
+**Curated NPC Generator for 5e Campaigns**
 
-## Getting Started
+NPCRoll is a lightweight web tool that generates fully-written NPCs for your 5e adventures.  
+Pick your filters, roll the dice, and instantly receive a curated character with:
 
-First, run the development server:
+- personality  
+- motivations  
+- appearance  
+- hooks & rumors  
+- dialogue lines  
+- optional thematic roles (innkeeper, merchant, priest, farmer, etc.)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+No login required. No ads (for now). Just quick NPCs for busy Game Masters.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🚀 Live Website  
+👉 https://npcroll.com
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## 🧠 What NPCRoll Does  
+NPCRoll removes prep stress by delivering **high-quality, ready-to-use NPCs** with a single click.
 
-To learn more about Next.js, take a look at the following resources:
+Each NPC includes:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Race  
+- Morality / Alignment  
+- Personality traits  
+- Look & description  
+- Motivations  
+- Voice description  
+- Two hooks suitable for in-session use  
+- Two ready dialogue lines  
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+All text is **original**, handcrafted through a controlled process, and fully **SRD-safe**.
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## ⚙️ Tech Stack  
+- **Next.js 14 (App Router)**  
+- **TypeScript**  
+- **React**  
+- **Custom CSS**  
+- **Vercel** (hosting)  
+- **FormSubmit** (feedback)  
+- Mobile-first design  
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## 📂 Project Structure
+
+app/
+├ page.tsx → Main NPC generator
+├ feedback/ → Feedback form
+├ thanks/ → Feedback success page
+└ legal/ → Terms, Privacy, SRD Credits, Cookies
+
+public/
+├ og-cover.png → OpenGraph image
+├ favicon.* → App icons
+└ logo.svg → Branding assets
+
+---
+
+🔐 Legal & Licensing
+NPCRoll uses only content allowed under the SRD 5.1/5.2 and original text.
+
+Not affiliated with Wizards of the Coast
+
+No copyrighted lore, names, items, spells, or settings
+
+All narrative content is original
+
+Full legal details:
+👉 https://npcroll.com/legal
+
+---
+
+🤝 Contributing
+Contributions are welcome!
+
+You can help with:
+
+Content ideas!
+
+UI improvements
+
+Bug fixes
+
+Performance optimization
+
+Accessibility
+
+Additional SRD-safe filters
+
+UX improvements
+
+Open an issue or submit a PR.
+
+📬 Feedback
+Give feedback via the website:
+👉 https://npcroll.com/feedback
+Or open an issue.
+
+---
+
+⭐ Roadmap
+ More races & professions
+
+ Optional NPC portraits
+
+ Shareable NPC URLs
+
+ NPC Packs by different criteria
+
+ Improved mobile UX
+
+---
+
+❤️ Credits
+Created by Gianos to help Game Masters save prep time and enrich their campaigns.
