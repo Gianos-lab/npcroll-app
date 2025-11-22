@@ -15,12 +15,12 @@ No login required. No ads (for now). Just quick NPCs for busy Game Masters.
 
 ---
 
-## 🚀 Live Website  
-👉 https://npcroll.com
+## Live Website  
+https://npcroll.com
 
 ---
 
-## 🧠 What NPCRoll Does  
+## What NPCRoll Does  
 NPCRoll removes prep stress by delivering **high-quality, ready-to-use NPCs** with a single click.
 
 Each NPC includes:
@@ -38,7 +38,7 @@ All text is **original**, handcrafted through a controlled process, and fully **
 
 ---
 
-## ⚙️ Tech Stack  
+## Tech Stack  
 - **Next.js 14 (App Router)**  
 - **TypeScript**  
 - **React**  
@@ -49,7 +49,7 @@ All text is **original**, handcrafted through a controlled process, and fully **
 
 ---
 
-## 📂 Project Structure
+## Project Structure
 
 app/
 ├ page.tsx → Main NPC generator
@@ -64,7 +64,7 @@ public/
 
 ---
 
-🔐 Legal & Licensing
+## Legal & Licensing
 NPCRoll uses only content allowed under the SRD 5.1/5.2 and original text.
 
 Not affiliated with Wizards of the Coast
@@ -74,39 +74,40 @@ No copyrighted lore, names, items, spells, or settings
 All narrative content is original
 
 Full legal details:
-👉 https://npcroll.com/legal
+https://npcroll.com/legal
 
 ---
 
-🤝 Contributing
-Contributions are welcome!
+## Contributing
 
-You can help with:
+NPCRoll is currently developed and maintained by a single creator.  
+For this reason, **external code contributions (PRs) are not being accepted** at this time.
 
-Content ideas!
+However, feedback and ideas are always welcome!
 
-UI improvements
+You can help by sharing:
 
-Bug fixes
+- Feature suggestions  
+- UI/UX ideas  
+- Bug reports  
+- Accessibility tips  
+- Requests for new filters or pack themes  
 
-Performance optimization
-
-Accessibility
-
-Additional SRD-safe filters
-
-UX improvements
-
-Open an issue or submit a PR.
-
-📬 Feedback
-Give feedback via the website:
-👉 https://npcroll.com/feedback
-Or open an issue.
+Please use the in-site feedback form or open a GitHub issue.
+👉 https://npcroll.com/feedback  
 
 ---
 
-⭐ Roadmap
+## Feedback
+
+If you want to suggest features or report bugs, use the website feedback form:  
+https://npcroll.com/feedback  
+
+Or open a GitHub issue with your idea.
+
+---
+
+Roadmap
  More races & professions
 
  Optional NPC portraits
@@ -119,5 +120,5 @@ Or open an issue.
 
 ---
 
-❤️ Credits
+Credits
 Created by Gianos to help Game Masters save prep time and enrich their campaigns.
