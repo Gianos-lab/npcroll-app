@@ -42,3 +42,12 @@ next-env.d.ts
 
 # Sentry Config File
 .env.sentry-build-plugin
+
+# private internal docs
+docs_internal
+factory
+data/pack_01/
+data/pack_01.json
+key.env
+.env
+,env,*
