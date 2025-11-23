@@ -276,15 +276,20 @@ export default function RoadmapPage() {
                                 <div style={stripReleased} />
 
                                 <article style={card}>
-                                    <h3 style={cardTitle}>v1.0 — Core Library Pack  </h3>
+                                    <h3 style={cardTitle}>Starting Village Pack</h3>
                                     <div style={pillRow}>
-                                        <span style={pillType}>Core content</span>
+                                        <span style={pillType}>New races</span>
+                                        <span style={pillType}>New professions</span>
                                     </div>
                                     <p style={pBody}>
-                                        The first stable release of NPCRoll focuses on a tight,
-                                        versatile core: iconic fantasy races, a small but powerful
-                                        set of professions, and full coverage for sex and alignment.
-                                        This forms the foundation of the entire library.
+                                        This pack brings to life the friendly, nosy, and
+                                        occasionally chaotic folks who greet adventurers
+                                        at the very start of their journey: busy market stalls,
+                                        quiet chapels, and inns where gossip counts as a local
+                                        sport. Whether your story begins with a small village
+                                        mystery or a dragon interrupting a crossroads fair,
+                                        these NPCs deliver warmth, trouble, and the inevitable:
+                                        “I swear something’s hiding in the cellar!”
                                     </p>
                                     <p
                                         style={{
@@ -307,18 +312,10 @@ export default function RoadmapPage() {
                                         }}
                                     >
                                         <li>
-                                            <strong>Races:</strong> Human, Elf, Dwarf, Halfling, Orc,
-                                            Tiefling
+                                            <strong>Races:</strong> Human, Halfling
                                         </li>
                                         <li>
-                                            <strong>Sex:</strong> Male, Female
-                                        </li>
-                                        <li>
-                                            <strong>Alignments:</strong> full 9-point 5e grid
-                                        </li>
-                                        <li>
-                                            <strong>Professions:</strong> Merchant, Innkeeper, Noble,
-                                            Warrior, Mage, Priest
+                                            <strong>Professions:</strong> Innkeeper, Merchant, Priest
                                         </li>
                                     </ul>
                                 </article>
