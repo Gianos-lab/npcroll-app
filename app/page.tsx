@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import NavTabs from "@/components/animata/container/nav-tabs";
-import FeedbackButton from "@/components/ui/feedback-button";
+import ExternalLinkButton from "@/components/animata/button/external-link-button";
 import {
   Select,
   SelectTrigger,
@@ -24,11 +24,9 @@ export default function Home() {
           <div className="flex items-center gap-2">
             <img src="/logo.svg" alt="NPCRoll Logo" className="w-16 h-16" />
           </div>
-          <nav className="flex items-center">
+          <nav className="flex items-center gap-6">
             <NavTabs tabs={["Roll", "Packs"]} size="sm" />
-            <div className="ml-3">
-              <FeedbackButton size="sm" />
-            </div>
+            <ExternalLinkButton text="Feedback" />
           </nav>
         </div>
       </header>

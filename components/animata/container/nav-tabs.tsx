@@ -20,7 +20,7 @@ export default function NavTabs({ tabs, size = 'md' }: NavTabsProps) {
   const [selected, setSelected] = useState<string>(tabs[0]);
 
   return (
-    <div className="flex flex-wrap items-center gap-4">
+    <div className="flex items-center gap-6">
       {tabs.map((tab) => (
         <Tab text={tab} selected={selected === tab} setSelected={setSelected} key={tab} size={size} />
       ))}
