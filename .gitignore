@@ -65,3 +65,6 @@ data/pack01/event_seeds.json
 
 # Feedback data (user submissions - sensitive)
 app/feedback/data/
+
+# Ignore Windows special device name that may appear as an accidental file
+nul
