@@ -12,7 +12,6 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { ChevronDown } from "lucide-react";
-import NavTabs from "@/components/animata/container/nav-tabs";
 import ExternalLinkButton from "@/components/animata/button/external-link-button";
 import {
   Select,
@@ -21,6 +20,8 @@ import {
   SelectItem,
   SelectValue,
 } from "@/components/ui/select";
+import { InfoTooltip } from "@/components/info-tooltip";
+import { Info } from "lucide-react";
 
 export default function Home() {
   const [isPackExpanded, setIsPackExpanded] = useState(false);
@@ -37,47 +38,65 @@ export default function Home() {
             <img src="/logo.svg" alt="NPCRoll Logo" className="w-16 h-16" />
           </div>
           <nav className="flex items-center gap-6">
-            <NavTabs tabs={["Roll", "Packs"]} size="sm" />
             <ExternalLinkButton text="Feedback" />
           </nav>
         </div>
       </header>
 
       {/* Main Content */}
-      <main className="flex-1 flex">
-        <div className="w-full max-w-7xl mx-auto flex gap-8 p-8">
-          {/* SIDEBAR - Sinistra */}
-          <aside className="w-80 flex-shrink-0 space-y-6">
-            {/* NPCRoll Title */}
-            <div className="text-white">
-              <h1 className="text-4xl font-display font-bold mb-2">NPCRoll</h1>
-              <p className="text-white/70 text-sm">A curated library of NPCs with unique personality, voice and hooks.</p>
-            </div>
+      <main className="flex-1 flex items-center">
+        <div className="w-full max-w-7xl mx-auto flex gap-10 p-8">
+          {/* LEFT COLUMN */}
+          <aside className="w-[460px] max-w-full flex-shrink-0 space-y-6">
+            {/* Try it yourself Card */}
+            <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-xl p-7 space-y-6 w-full">
+              {/* Hero Text */}
+              <div className="text-center">
+                <h1 className="text-3xl font-bold text-white font-display">Need an NPC? Roll one.</h1>
+              </div>
 
-            {/* Try it yourself Section */}
-            <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-lg p-6 space-y-4">
-              <h2 className="text-xl font-semibold text-white">Try it yourself:</h2>
+              <div className="flex items-center gap-2 mb-2">
+                <h2 className="text-sm font-semibold text-white/80">Current Pack</h2>
+                <InfoTooltip
+                  content={
+                    <span className="text-sm">Packs are themed slices of the world; each one contains its own races, roles and personalities. This preview includes only one pack, but more are in the works.</span>
+                  }
+                >
+                  <Info className="w-4 h-4" />
+                </InfoTooltip>
+              </div>
 
-              {/* Pack Selection */}
-              <div className="space-y-3">
-                <label className="text-sm font-medium text-white/90 block">Pack:</label>
-                <Select defaultValue="starting-village">
-                  <SelectTrigger className="w-full glass-select" aria-label="Pack">
-                    <SelectValue placeholder="Select pack" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="starting-village">Starting Village</SelectItem>
-                  </SelectContent>
-                </Select>
+              {/* Chosen Pack Card */}
+              <div className="flex items-center gap-4 rounded-xl bg-white/5 backdrop-blur-sm px-4 py-3 shadow-sm border border-white/10 w-full">
+                <div className="flex-shrink-0">
+                  <img
+                    src="/packs/starting-village.jpeg"
+                    alt="Starting Village"
+                    className="w-16 h-16 rounded-lg object-cover border border-white/20 shadow"
+                  />
+                </div>
+                <div className="flex flex-col justify-center min-w-0 flex-1">
+                  <span className="font-bold text-base text-white leading-tight">
+                    Starting Village
+                  </span>
+                  <span className="text-sm text-white/70 leading-snug mt-1">
+                    Innkeepers, merchants, and the essential faces in any starting adventure.
+                  </span>
+                </div>
               </div>
 
               <Separator className="bg-white/20" />
 
               {/* Generate Button */}
-              <button className="w-full roll-btn flex items-center justify-center gap-3 px-6 py-3">
-                <img src="/roll_white.svg" alt="dice" className="w-6 h-6" />
-                <span className="font-display font-bold">GENERATE NPC</span>
-              </button>
+              <div className="flex justify-center">
+                <button className="group relative overflow-hidden rounded-lg bg-[#D4AF6A] px-6 py-3 transition-all shadow-lg shadow-[#D4AF6A]/30">
+                  <span className="absolute bottom-0 left-0 h-48 w-full origin-bottom translate-y-full transform overflow-hidden rounded-lg bg-white/15 transition-all duration-300 ease-out group-hover:translate-y-14"></span>
+                  <div className="relative flex items-center justify-center gap-2">
+                    <img src="/roll.svg" alt="dice" className="w-6 h-6" />
+                    <span className="font-display font-bold text-sm text-slate-900">ROLL NPC</span>
+                  </div>
+                </button>
+              </div>
 
               {/* Filters */}
               <div className="space-y-3">
@@ -170,39 +189,42 @@ export default function Home() {
             </div>
           </aside>
 
-          {/* MAIN AREA - Destra */}
-          <div className="flex-1 flex items-start justify-center pt-12">
-            <Card className="glass-card max-w-2xl w-full">
-              <CardHeader>
-                <CardTitle className="text-3xl font-display">Tamley Duskpot</CardTitle>
-                <p className="text-lg text-white/80 mt-1">Halfling Farmer (Evil)</p>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                {/* Quote */}
-                <div className="bg-white/5 border-l-4 border-teal-400 p-4 rounded">
-                  <p className="text-white/90 italic">"Oh, what a shame about your beans this year..."</p>
-                </div>
+          {/* RIGHT COLUMN */}
+          <section className="flex-1 min-w-0">
+            {/* MAIN AREA - Destra */}
+            <div className="flex-1 flex items-start justify-center pt-12">
+              <Card className="glass-card max-w-2xl w-full">
+                <CardHeader>
+                  <CardTitle className="text-3xl font-display">Tamley Duskpot</CardTitle>
+                  <p className="text-lg text-white/80 mt-1">Halfling Farmer (Evil)</p>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  {/* Quote */}
+                  <div className="bg-white/5 border-l-4 border-teal-400 p-4 rounded">
+                    <p className="text-white/90 italic">"Oh, what a shame about your beans this year..."</p>
+                  </div>
 
-                {/* Action Buttons */}
-                <div className="flex flex-wrap gap-3">
-                  <Button variant="outline" className="glass-select">
-                    Hook
-                  </Button>
-                  <Button variant="outline" className="glass-select">
-                    Rumor
-                  </Button>
-                  <Button variant="outline" className="glass-select">
-                    Copy
-                  </Button>
-                </div>
+                  {/* Action Buttons */}
+                  <div className="flex flex-wrap gap-3">
+                    <Button variant="outline" className="glass-select">
+                      Hook
+                    </Button>
+                    <Button variant="outline" className="glass-select">
+                      Rumor
+                    </Button>
+                    <Button variant="outline" className="glass-select">
+                      Copy
+                    </Button>
+                  </div>
 
-                {/* Helper Text */}
-                <div className="text-center pt-4 border-t border-white/20">
-                  <p className="text-white/60 text-sm">← Click Generate for yours</p>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
+                  {/* Helper Text */}
+                  <div className="text-center pt-4 border-t border-white/20">
+                    <p className="text-white/60 text-sm">← Click Generate for yours</p>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </section>
         </div>
       </main>
 
@@ -216,8 +238,6 @@ export default function Home() {
 
             <div className="flex items-center gap-4 mt-2 md:mt-0">
               <a href="/" className="text-teal-300 hover:text-teal-200 transition-colors">Roll</a>
-              <span className="text-white/40 hidden md:inline">|</span>
-              <a href="/packs" className="text-teal-300 hover:text-teal-200 transition-colors">Packs</a>
               <span className="text-white/40 hidden md:inline">|</span>
               <a href="/feedback" className="text-teal-300 hover:text-teal-200 transition-colors">Feedback</a>
             </div>

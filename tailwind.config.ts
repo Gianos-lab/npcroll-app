@@ -147,6 +147,7 @@ const config: Config = {
         "in": "in 0.2s ease-out",
         "out": "out 0.2s ease-in",
         "fade-in": "fade-in 0.2s ease-out",
+        "fadeIn": "fade-in 0.5s ease-out", // Carousel fade-in animation
         "fade-out": "fade-out 0.2s ease-in",
         "zoom-in": "zoom-in 0.2s ease-out",
         "zoom-out": "zoom-out 0.2s ease-in",
@@ -167,7 +168,9 @@ const config: Config = {
     },
   },
   plugins: [
-    require("tw-animate-css")
+    // animation utilities plugin
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    require('tailwindcss-animate')
   ],
 };
 export default config;

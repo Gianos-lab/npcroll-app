@@ -34,6 +34,7 @@ export type Npc = {
   voice: string;
   hooks: string[];
   lines: string[];
+  rumor?: string;
 };
 
 // Transform raw data to match expected format
@@ -50,6 +51,7 @@ const npcs: Npc[] = rawNpcs.map((raw) => ({
   history: raw.history,
   motivation: raw.hook, // Using hook as motivation
   voice: raw.voice,
+  rumor: raw.rumor,
   hooks: [raw.hook],
   lines: [raw.line_1, raw.line_2].filter(Boolean),
 }));
