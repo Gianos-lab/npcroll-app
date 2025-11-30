@@ -115,16 +115,23 @@ export default function Home() {
       {/* Footer */}
       <footer className="bg-white/10 backdrop-blur-md border-t border-white/20 mt-auto">
         <div className="max-w-7xl mx-auto px-4 py-6">
-          <p className="text-center text-white/80 text-sm">
-            © 2025 NPCRoll.{" "}
-            <a href="/legal" className="text-teal-300 hover:text-teal-200 transition-colors">
-              Licenza & Privacy
-            </a>
-            {" · "}
-            <a href="/feedback" className="text-teal-300 hover:text-teal-200 transition-colors">
-              Feedback
-            </a>
-          </p>
+          <div className="flex flex-col md:flex-row items-center md:items-center justify-between gap-3 text-white/80 text-sm">
+            <div className="md:flex-1 md:text-left text-center">
+              NPCRoll is a curated library of NPCs with unique personality, voice and hooks. Ready to use at your table.
+            </div>
+
+            <div className="flex items-center gap-4 mt-2 md:mt-0">
+              <a href="/" className="text-teal-300 hover:text-teal-200 transition-colors">Roll</a>
+              <span className="text-white/40 hidden md:inline">|</span>
+              <a href="/packs" className="text-teal-300 hover:text-teal-200 transition-colors">Packs</a>
+              <span className="text-white/40 hidden md:inline">|</span>
+              <a href="/feedback" className="text-teal-300 hover:text-teal-200 transition-colors">Feedback</a>
+            </div>
+
+            <div className="md:text-right text-center text-white/70 mt-2 md:mt-0">
+              © 2025 NPCRoll. <a href="/legal" className="text-teal-300 hover:text-teal-200 transition-colors">Licence & Privacy</a>
+            </div>
+          </div>
         </div>
       </footer>
     </div>
