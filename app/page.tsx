@@ -3,6 +3,15 @@
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
+import { ChevronDown } from "lucide-react";
 import NavTabs from "@/components/animata/container/nav-tabs";
 import ExternalLinkButton from "@/components/animata/button/external-link-button";
 import {
@@ -15,6 +24,9 @@ import {
 
 export default function Home() {
   const [isPackExpanded, setIsPackExpanded] = useState(false);
+  const [isRaceOpen, setIsRaceOpen] = useState(true);
+  const [isMoralityOpen, setIsMoralityOpen] = useState(true);
+  const [isProfessionOpen, setIsProfessionOpen] = useState(true);
 
   return (
     <div className="min-h-screen flex flex-col" style={{ backgroundImage: 'url(/texture.jpg)', backgroundSize: 'cover', backgroundPosition: 'center' }}>
@@ -32,82 +44,164 @@ export default function Home() {
       </header>
 
       {/* Main Content */}
-      <main className="flex-1 p-8">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Card a sinistra */}
-          <div className="flex justify-start mt-8 lg:mt-12">
-            <Card className="glass-card max-w-2xl w-full relative" style={{ marginLeft: '1rem' }}>
-              <div className="card-top-panel relative rounded-md p-4 mb-4">
-                <button className="nav-arrow left-2" aria-label="prev">‹</button>
-                <div className="text-xs mb-2">480 NPCs • 2 races • 4 professions</div>
-                <h4>Pack 01: Starting Village</h4>
-                <p className="text-sm">Folks designed to support the opening moments of a campaign: taverns, chapels, farms, markets, and the friendly (or suspicious) faces within.</p>
-                <button className="nav-arrow right-2" aria-label="next">›</button>
+      <main className="flex-1 flex">
+        <div className="w-full max-w-7xl mx-auto flex gap-8 p-8">
+          {/* SIDEBAR - Sinistra */}
+          <aside className="w-80 flex-shrink-0 space-y-6">
+            {/* NPCRoll Title */}
+            <div className="text-white">
+              <h1 className="text-4xl font-display font-bold mb-2">NPCRoll</h1>
+              <p className="text-white/70 text-sm">A curated library of NPCs with unique personality, voice and hooks.</p>
+            </div>
+
+            {/* Try it yourself Section */}
+            <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-lg p-6 space-y-4">
+              <h2 className="text-xl font-semibold text-white">Try it yourself:</h2>
+
+              {/* Pack Selection */}
+              <div className="space-y-3">
+                <label className="text-sm font-medium text-white/90 block">Pack:</label>
+                <Select defaultValue="starting-village">
+                  <SelectTrigger className="w-full glass-select" aria-label="Pack">
+                    <SelectValue placeholder="Select pack" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="starting-village">Starting Village</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
 
+              <Separator className="bg-white/20" />
+
+              {/* Generate Button */}
+              <button className="w-full roll-btn flex items-center justify-center gap-3 px-6 py-3">
+                <img src="/roll_white.svg" alt="dice" className="w-6 h-6" />
+                <span className="font-display font-bold">GENERATE NPC</span>
+              </button>
+
+              {/* Filters */}
+              <div className="space-y-3">
+                <h3 className="text-sm font-semibold text-white/80 uppercase tracking-wide">Filters</h3>
+
+                {/* Race Filter */}
+                <Collapsible open={isRaceOpen} onOpenChange={setIsRaceOpen}>
+                  <CollapsibleTrigger className="flex items-center justify-between w-full p-3 rounded-md bg-white/5 hover:bg-white/10 transition-colors">
+                    <span className="text-sm font-medium text-white/90">Race</span>
+                    <ChevronDown className={`h-4 w-4 text-white/60 transition-transform ${isRaceOpen ? 'rotate-180' : ''}`} />
+                  </CollapsibleTrigger>
+                  <CollapsibleContent className="pt-3 px-2">
+                    <RadioGroup defaultValue="all-races" className="space-y-2">
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="all-races" id="race-all" className="border-white/40 text-teal-400" />
+                        <Label htmlFor="race-all" className="text-sm text-white/80 cursor-pointer">All Races</Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="human" id="race-human" className="border-white/40 text-teal-400" />
+                        <Label htmlFor="race-human" className="text-sm text-white/80 cursor-pointer">Human</Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="halfling" id="race-halfling" className="border-white/40 text-teal-400" />
+                        <Label htmlFor="race-halfling" className="text-sm text-white/80 cursor-pointer">Halfling</Label>
+                      </div>
+                    </RadioGroup>
+                  </CollapsibleContent>
+                </Collapsible>
+
+                {/* Morality Filter */}
+                <Collapsible open={isMoralityOpen} onOpenChange={setIsMoralityOpen}>
+                  <CollapsibleTrigger className="flex items-center justify-between w-full p-3 rounded-md bg-white/5 hover:bg-white/10 transition-colors">
+                    <span className="text-sm font-medium text-white/90">Morality</span>
+                    <ChevronDown className={`h-4 w-4 text-white/60 transition-transform ${isMoralityOpen ? 'rotate-180' : ''}`} />
+                  </CollapsibleTrigger>
+                  <CollapsibleContent className="pt-3 px-2">
+                    <RadioGroup defaultValue="all" className="space-y-2">
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="all" id="morality-all" className="border-white/40 text-teal-400" />
+                        <Label htmlFor="morality-all" className="text-sm text-white/80 cursor-pointer">All</Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="good" id="morality-good" className="border-white/40 text-teal-400" />
+                        <Label htmlFor="morality-good" className="text-sm text-white/80 cursor-pointer">Good</Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="neutral" id="morality-neutral" className="border-white/40 text-teal-400" />
+                        <Label htmlFor="morality-neutral" className="text-sm text-white/80 cursor-pointer">Neutral</Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="evil" id="morality-evil" className="border-white/40 text-teal-400" />
+                        <Label htmlFor="morality-evil" className="text-sm text-white/80 cursor-pointer">Evil</Label>
+                      </div>
+                    </RadioGroup>
+                  </CollapsibleContent>
+                </Collapsible>
+
+                {/* Profession Filter */}
+                <Collapsible open={isProfessionOpen} onOpenChange={setIsProfessionOpen}>
+                  <CollapsibleTrigger className="flex items-center justify-between w-full p-3 rounded-md bg-white/5 hover:bg-white/10 transition-colors">
+                    <span className="text-sm font-medium text-white/90">Profession</span>
+                    <ChevronDown className={`h-4 w-4 text-white/60 transition-transform ${isProfessionOpen ? 'rotate-180' : ''}`} />
+                  </CollapsibleTrigger>
+                  <CollapsibleContent className="pt-3 px-2">
+                    <RadioGroup defaultValue="all-professions" className="space-y-2">
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="all-professions" id="prof-all" className="border-white/40 text-teal-400" />
+                        <Label htmlFor="prof-all" className="text-sm text-white/80 cursor-pointer">All Professions</Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="merchant" id="prof-merchant" className="border-white/40 text-teal-400" />
+                        <Label htmlFor="prof-merchant" className="text-sm text-white/80 cursor-pointer">Merchant</Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="guard" id="prof-guard" className="border-white/40 text-teal-400" />
+                        <Label htmlFor="prof-guard" className="text-sm text-white/80 cursor-pointer">Guard</Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="farmer" id="prof-farmer" className="border-white/40 text-teal-400" />
+                        <Label htmlFor="prof-farmer" className="text-sm text-white/80 cursor-pointer">Farmer</Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="innkeeper" id="prof-innkeeper" className="border-white/40 text-teal-400" />
+                        <Label htmlFor="prof-innkeeper" className="text-sm text-white/80 cursor-pointer">Innkeeper</Label>
+                      </div>
+                    </RadioGroup>
+                  </CollapsibleContent>
+                </Collapsible>
+              </div>
+            </div>
+          </aside>
+
+          {/* MAIN AREA - Destra */}
+          <div className="flex-1 flex items-start justify-center pt-12">
+            <Card className="glass-card max-w-2xl w-full">
+              <CardHeader>
+                <CardTitle className="text-3xl font-display">Tamley Duskpot</CardTitle>
+                <p className="text-lg text-white/80 mt-1">Halfling Farmer (Evil)</p>
+              </CardHeader>
               <CardContent className="space-y-6">
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 items-end">
-                  <div className="flex flex-col">
-                    <label className="text-sm font-medium mb-2">Race</label>
-                    <Select defaultValue="random">
-                      <SelectTrigger className="w-full glass-select" aria-label="Race">
-                        <SelectValue placeholder="Random" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="random">Random</SelectItem>
-                        <SelectItem value="human">Human</SelectItem>
-                        <SelectItem value="halfling">Halfling</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  <div className="flex flex-col">
-                    <label className="text-sm font-medium mb-2">Alignment</label>
-                    <Select defaultValue="random">
-                      <SelectTrigger className="w-full glass-select" aria-label="Alignment">
-                        <SelectValue placeholder="Random" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="random">Random</SelectItem>
-                        <SelectItem value="good">Good</SelectItem>
-                        <SelectItem value="neutral">Neutral</SelectItem>
-                        <SelectItem value="evil">Evil</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  <div className="flex flex-col">
-                    <label className="text-sm font-medium mb-2">Profession</label>
-                    <Select defaultValue="random">
-                      <SelectTrigger className="w-full glass-select" aria-label="Profession">
-                        <SelectValue placeholder="Random" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="random">Random</SelectItem>
-                        <SelectItem value="merchant">Merchant</SelectItem>
-                        <SelectItem value="guard">Guard</SelectItem>
-                        <SelectItem value="farmer">Farmer</SelectItem>
-                        <SelectItem value="innkeeper">Innkeeper</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
+                {/* Quote */}
+                <div className="bg-white/5 border-l-4 border-teal-400 p-4 rounded">
+                  <p className="text-white/90 italic">"Oh, what a shame about your beans this year..."</p>
                 </div>
 
-                <div className="flex justify-center mt-2">
-                  <button className="roll-btn flex items-center gap-3 px-6 py-3">
-                    <img src="/roll_white.svg" alt="dice" className="w-6 h-6" />
-                    <span className="font-display font-bold">ROLL NPC</span>
-                  </button>
+                {/* Action Buttons */}
+                <div className="flex flex-wrap gap-3">
+                  <Button variant="outline" className="glass-select">
+                    Hook
+                  </Button>
+                  <Button variant="outline" className="glass-select">
+                    Rumor
+                  </Button>
+                  <Button variant="outline" className="glass-select">
+                    Copy
+                  </Button>
+                </div>
+
+                {/* Helper Text */}
+                <div className="text-center pt-4 border-t border-white/20">
+                  <p className="text-white/60 text-sm">← Click Generate for yours</p>
                 </div>
               </CardContent>
             </Card>
-          </div>
-
-          {/* Spazio a destra (per ora vuoto) */}
-          <div>
-            <div className="text-white/60 text-center p-8">
-              <p>NPC result will appear here</p>
-            </div>
           </div>
         </div>
       </main>
