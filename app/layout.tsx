@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import QueryProvider from "@/components/query-provider";
 
 export const metadata: Metadata = {
   title: "NPCRoll — Generate NPCs for Your 5e Adventures",
@@ -44,12 +43,10 @@ export default function RootLayout({
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600;700&display=swap" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600;700&family=Germania+One&display=swap" rel="stylesheet" />
       </head>
       <body>
-        <QueryProvider>
-          {children}
-        </QueryProvider>
+        {children}
       </body>
     </html>
   );
