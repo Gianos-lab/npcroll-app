@@ -1,4 +1,24 @@
-import npcData from "@/data/npcs.json";
+import npcData from "@/data/pack01/pack01_fv.json";
+
+type RawNpc = {
+  id: string;
+  pack_id: string;
+  race: string;
+  profession: string;
+  morality: string;
+  status: string;
+  name: string;
+  surname: string;
+  description: string;
+  look: string;
+  personality: string;
+  hook: string;
+  history: string;
+  voice: string;
+  line_1: string;
+  line_2: string;
+  rumor: string;
+};
 
 export type Npc = {
   id: string;
@@ -16,7 +36,23 @@ export type Npc = {
   lines: string[];
 };
 
-const npcs = npcData as Npc[];
+// Transform raw data to match expected format
+const rawNpcs = npcData as RawNpc[];
+const npcs: Npc[] = rawNpcs.map((raw) => ({
+  id: raw.id,
+  race: raw.race,
+  sex: "Male", // Default - we don't have this field in pack01
+  alignment: raw.morality,
+  name: raw.name,
+  surname: raw.surname,
+  description: raw.description,
+  personality: raw.personality,
+  history: raw.history,
+  motivation: raw.hook, // Using hook as motivation
+  voice: raw.voice,
+  hooks: [raw.hook],
+  lines: [raw.line_1, raw.line_2].filter(Boolean),
+}));
 
 export type NpcFilters = {
   race?: string | null;
@@ -72,6 +108,14 @@ export function getAllAlignments(): string[] {
     alignments.add(npc.alignment);
   }
   return Array.from(alignments).sort();
+}
+
+export function getAllProfessions(): string[] {
+  const professions = new Set<string>();
+  for (const raw of rawNpcs) {
+    professions.add(raw.profession);
+  }
+  return Array.from(professions).sort();
 }
 
 

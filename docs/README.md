@@ -1,40 +1,52 @@
-# NPCRoll  
+
+# NPCRoll
 **Curated NPC Generator for 5e Campaigns**
 
-NPCRoll is a lightweight web tool that generates fully-written NPCs for your 5e adventures.  
-Pick your filters, roll the dice, and instantly receive a curated character with:
-
-- personality  
-- motivations  
-- appearance  
-- hooks & rumors  
-- dialogue lines  
-- optional thematic roles (innkeeper, merchant, priest, farmer, etc.)
-
-No login required. No ads (for now). Just quick NPCs for busy Game Masters.
+NPCRoll is a Next.js web application that provides Game Masters with curated, original, and ready-to-use NPCs for fantasy campaigns. Unlike random generators, NPCRoll uses an internal NPC library, ensuring quality, SRD safety, and instant load times.
 
 ---
 
-## Live Website  
-https://npcroll.com
+
+## Project Overview
+
+NPCRoll is designed to deliver high-quality, filterable, and instantly available NPCs. NPCs are organized into thematic "Packs," each containing races, professions, morality, description, motivation, history, voice, two dialogue lines, and one rumor. The library expands over time with new packs.
+
+**Pack 01** (Starting Village):
+- Races: Human, Halfling
+- Professions: Innkeeper, Merchant, Priest, Farmer
+
+The web generator filters and serves NPCs, simulating a live generator experience without runtime complexity.
 
 ---
 
-## What NPCRoll Does  
-NPCRoll removes prep stress by delivering **high-quality, ready-to-use NPCs** with a single click.
 
-Each NPC includes:
+## Design & Color Palette
 
-- Race  
-- Morality / Alignment  
-- Personality traits  
-- Look & description  
-- Motivations  
-- Voice description  
-- Two hooks suitable for in-session use  
-- Two ready dialogue lines  
+Main palette ("Clean and Modern"):
 
-All text is **original**, handcrafted through a controlled process, and fully **SRD-safe**.
+| Color        | Hex      | Recommended Use |
+|--------------|----------|-----------------|
+| Dark Blue    | #17252A  | Main text, headings, important elements |
+| Dark Teal    | #2B7A78  | Button hovers, interactive elements, secondary accents |
+| Teal         | #3AAFA9  | Primary color (brand), links, buttons, accents |
+| Light Blue   | #DEF2F1  | Secondary backgrounds, cards, soft elements |
+| White        | #FEFFFF  | Main backgrounds, text on dark backgrounds |
+
+CSS Example:
+```css
+.my-element {
+  color: var(--color-dark);           /* Dark blue */
+  background: var(--color-teal);      /* Teal */
+  border-color: var(--color-teal-dark); /* Dark teal */
+}
+```
+
+Tailwind Example:
+```jsx
+<div className="bg-npc-teal text-npc-white">Hello!</div>
+<button className="bg-npc-teal hover:bg-npc-teal-dark">Click me</button>
+<div className="bg-npc-light text-npc-dark">
+```
 
 ---
 

@@ -30,8 +30,10 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
+# env files
 .env*
+!.env.example
+key.env
 
 # vercel
 .vercel
@@ -43,11 +45,23 @@ next-env.d.ts
 # Sentry Config File
 .env.sentry-build-plugin
 
-# private internal docs
-docs_internal
-factory
-data/pack_01/
-data/pack_01.json
-key.env
-.env
-,env,*
+# Private internal documentation and factory scripts (never commit)
+docs_internal/
+factory/
+
+# Data files (only commit final production files)
+data/pack01/batch_01/
+data/pack01/pack01_npcs.json
+data/pack01/pack01_rumors.json
+data/pack01/event_seeds.json
+*.bak
+
+# Backup and temporary files
+*-backup.*
+*-old.*
+*-broken.*
+*-clean.*
+*-temp.*
+
+# Feedback data (user submissions - sensitive)
+app/feedback/data/

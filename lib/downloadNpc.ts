@@ -27,11 +27,8 @@ function buildNpcTxt(npc: Npc): string {
   lines.push(`Description: ${npc.description}`);
   lines.push(`Personality: ${npc.personality}`);
   lines.push(`History: ${npc.history}`);
-  lines.push(`Motivation: ${npc.motivation}`);
+  lines.push(`Rumor: ${npc.rumor}`);
   lines.push(`Voice: ${npc.voice}`);
-  lines.push("");
-  lines.push("Hooks:");
-  npc.hooks.forEach((h) => lines.push(`- ${h}`));
   lines.push("");
   lines.push("Lines:");
   npc.lines.forEach((l) => lines.push(`- \"${l}\"`));
