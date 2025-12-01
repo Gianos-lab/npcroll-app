@@ -1,8 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
@@ -11,17 +9,9 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { ChevronDown, Users, Scale, Briefcase } from "lucide-react";
+import { ChevronDown, Users, Scale, Briefcase, Info } from "lucide-react";
 import ExternalLinkButton from "@/components/animata/button/external-link-button";
-import {
-  Select,
-  SelectTrigger,
-  SelectContent,
-  SelectItem,
-  SelectValue,
-} from "@/components/ui/select";
 import { InfoTooltip } from "@/components/info-tooltip";
-import { Info } from "lucide-react";
 import { NpcDetailPanel, NpcEmptyState, NpcLoadingState } from "@/components/npc-detail-panel";
 
 // NPC type for the fetched data
@@ -78,6 +68,7 @@ export default function Home() {
   const [isMoralityOpen, setIsMoralityOpen] = useState(true);
   const [isProfessionOpen, setIsProfessionOpen] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+  
   const [currentNpc, setCurrentNpc] = useState<Npc | null>(null);
   
   // Filter states
@@ -119,13 +110,13 @@ export default function Home() {
       {/* Main Content */}
       <main className="flex-1 flex items-center py-8 overflow-hidden">
         <div className="w-full max-w-7xl mx-auto flex gap-10 px-8 items-stretch">
-          {/* LEFT COLUMN */}
-          <aside className="w-[480px] max-w-full flex-shrink-0">
+          {/* LEFT COLUMN - fixed width, stretches to match right */}
+          <aside className="w-[480px] flex-shrink-0 flex">
             {/* Try it yourself Card */}
             <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-xl p-6 space-y-5 w-full">
               {/* Hero Text */}
               <div className="text-center">
-                <h1 className="text-3xl font-bold text-white font-display">Need an NPC? Roll one.</h1>
+                <h1 className="text-3xl font-bold text-white font-display">Need an NPC? Roll one</h1>
               </div>
 
               <div className="flex items-center gap-2 mb-2">
@@ -133,7 +124,7 @@ export default function Home() {
                 <InfoTooltip
                   content={
                     <span className="text-sm">NPCs are curated in Packs. Each Pack blends its own mix of races, professions, and personalities.
-This early build holds only one pack — but worry not, more are brewing..</span>
+This early build holds only one pack — but worry not, more are brewing.</span>
                   }
                 >
                   <Info className="w-4 h-4" />
@@ -166,13 +157,13 @@ This early build holds only one pack — but worry not, more are brewing..</span
                 <button 
                   onClick={handleRollNpc}
                   disabled={isLoading}
-                  className="group relative overflow-hidden rounded-lg bg-[#D4AF6A] px-8 py-3.5 transition-all duration-300 shadow-lg shadow-[#D4AF6A]/40 hover:shadow-[#D4AF6A]/60 hover:shadow-xl hover:scale-[1.02] disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100"
+                  className="group relative overflow-hidden rounded-lg bg-[#D4AF6A] px-10 py-4 transition-all duration-300 shadow-lg shadow-[#D4AF6A]/40 hover:shadow-[#D4AF6A]/60 hover:shadow-xl hover:scale-[1.02] disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100"
                 >
                   <span className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
                   <span className="absolute bottom-0 left-0 h-48 w-full origin-bottom translate-y-full transform overflow-hidden rounded-lg bg-white/20 transition-all duration-300 ease-out group-hover:translate-y-14"></span>
-                  <div className="relative flex items-center justify-center gap-2">
-                    <img src="/roll.svg" alt="dice" className={`w-6 h-6 transition-transform duration-300 ${isLoading ? 'animate-spin' : 'group-hover:rotate-12'}`} style={isLoading ? { animationDuration: '1s' } : undefined} />
-                    <span className="font-display font-bold text-sm text-slate-900">{isLoading ? 'ROLLING...' : 'ROLL NPC'}</span>
+                  <div className="relative flex items-center justify-center gap-3">
+                    <img src="/roll.svg" alt="dice" className={`w-8 h-8 transition-transform duration-300 ${isLoading ? 'animate-spin' : 'group-hover:rotate-12'}`} style={isLoading ? { animationDuration: '1s' } : undefined} />
+                    <span className="font-display font-bold text-lg text-slate-900">{isLoading ? 'ROLLING...' : 'ROLL NPC'}</span>
                   </div>
                 </button>
               </div>
@@ -277,14 +268,16 @@ This early build holds only one pack — but worry not, more are brewing..</span
             </div>
           </aside>
 
-          {/* RIGHT COLUMN */}
-          {isLoading ? (
-            <NpcLoadingState />
-          ) : currentNpc ? (
-            <NpcDetailPanel {...currentNpc} />
-          ) : (
-            <NpcEmptyState />
-          )}
+          {/* RIGHT COLUMN - fills remaining space, matches left height */}
+          <div className="flex-1 min-w-0 flex">
+            {isLoading ? (
+              <NpcLoadingState />
+            ) : currentNpc ? (
+              <NpcDetailPanel {...currentNpc} onRollAnother={handleRollNpc} />
+            ) : (
+              <NpcEmptyState />
+            )}
+          </div>
         </div>
       </main>
 

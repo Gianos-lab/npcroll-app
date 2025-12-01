@@ -5,10 +5,10 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
 
   const race = searchParams.get("race");
-  const sex = searchParams.get("sex");
-  const alignment = searchParams.get("alignment");
+  const morality = searchParams.get("morality");
+  const profession = searchParams.get("profession");
 
-  const npc = getRandomNpc({ race, sex, alignment });
+  const npc = getRandomNpc({ race, morality, profession });
 
   if (!npc) {
     return NextResponse.json(

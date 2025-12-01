@@ -3,6 +3,7 @@
 import * as React from "react";
 import { motion } from "framer-motion";
 import { BorderBeam } from "@/components/ui/border-beam";
+import { Dices, Copy, Check, RotateCcw } from "lucide-react";
 
 const LOADING_MESSAGES = [
   "Consulting the ancient grimoire…",
@@ -14,46 +15,87 @@ const LOADING_MESSAGES = [
 ];
 
 /**
+ * Skeleton placeholder bar component
+ */
+function SkeletonBar({ className }: { className?: string }) {
+  return (
+    <div className={`bg-white/10 rounded animate-pulse ${className || ''}`} />
+  );
+}
+
+/**
  * Loading state component for when an NPC is being fetched.
- * Shows a spinning dice and rotating flavor messages.
+ * Shows a skeleton "ghost" card that mimics the full NPC layout.
  */
 export function NpcLoadingState() {
   const [messageIndex, setMessageIndex] = React.useState(0);
 
   React.useEffect(() => {
-    // Pick a random starting message
     setMessageIndex(Math.floor(Math.random() * LOADING_MESSAGES.length));
-    
-    // Rotate messages every 1500ms
     const interval = setInterval(() => {
       setMessageIndex((prev) => (prev + 1) % LOADING_MESSAGES.length);
     }, 1500);
-
     return () => clearInterval(interval);
   }, []);
 
   return (
-    <section className="flex-1 min-w-0 self-start">
-      {/* Container matches the full panel style */}
-      <div className="h-[220px] rounded-xl bg-[#17252A]/95 backdrop-blur-md border border-white/10 shadow-[0_8_60px_rgba(0,0,0,0.6)] px-7 py-7 flex flex-col items-center justify-center">
+    <section className="h-full w-full">
+      {/* Main panel - same glass style as full state */}
+      <div className="h-full rounded-xl bg-[#17252A]/95 backdrop-blur-md border border-white/10 shadow-[0_8_60px_rgba(0,0,0,0.6)] px-7 py-7 flex flex-col gap-6">
         
-        {/* Centered content */}
-        <div className="flex flex-col items-center text-center gap-4">
-          
-          {/* Spinning dice icon */}
-          <img 
-            src="/roll_white.svg" 
-            alt="Loading" 
-            className="w-12 h-12 opacity-80 drop-shadow-[0_0_12px_rgba(58,175,169,0.5)] animate-spin"
-            style={{ animationDuration: '2s' }}
-          />
-          
-          {/* Rotating loading message */}
-          <p className="text-sm text-[#FEFFFF] transition-opacity duration-300">
+        {/* Loading message at top */}
+        <div className="flex items-center gap-3 mb-2">
+          <Dices className="w-5 h-5 text-[#3AAFA9] animate-spin" style={{ animationDuration: '2s' }} />
+          <p className="text-sm text-[#3AAFA9] font-medium">
             {LOADING_MESSAGES[messageIndex]}
           </p>
-          
         </div>
+
+        {/* 1) HEADER skeleton */}
+        <header>
+          <SkeletonBar className="h-8 w-3/4 mb-2" />
+          <SkeletonBar className="h-4 w-1/2" />
+        </header>
+
+        {/* 2) OVERVIEW skeleton */}
+        <section>
+          <SkeletonBar className="h-3 w-20 mb-3" />
+          <div className="rounded-lg bg-white/5 border border-white/10 p-4 space-y-2">
+            <SkeletonBar className="h-4 w-full" />
+            <SkeletonBar className="h-4 w-5/6" />
+            <SkeletonBar className="h-4 w-4/6" />
+          </div>
+        </section>
+
+        {/* 3) WHAT DEFINES THEM skeleton */}
+        <section>
+          <SkeletonBar className="h-3 w-32 mb-3" />
+          <div className="rounded-lg bg-white/5 border border-white/10 p-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {['Look', 'Personality', 'History', 'Voice'].map((label) => (
+                <div key={label}>
+                  <SkeletonBar className="h-2.5 w-16 mb-2" />
+                  <SkeletonBar className="h-4 w-full" />
+                  <SkeletonBar className="h-4 w-3/4 mt-1" />
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* 4) AT THE TABLE skeleton */}
+        <section className="mt-auto">
+          <SkeletonBar className="h-3 w-24 mb-3" />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="rounded-lg bg-white/5 border border-white/10 p-4">
+                <SkeletonBar className="h-2.5 w-14 mb-3" />
+                <SkeletonBar className="h-4 w-full" />
+                <SkeletonBar className="h-4 w-5/6 mt-1" />
+              </div>
+            ))}
+          </div>
+        </section>
       </div>
     </section>
   );
@@ -65,9 +107,9 @@ export function NpcLoadingState() {
  */
 export function NpcEmptyState() {
   return (
-    <section className="flex-1 min-w-0 flex">
+    <section className="h-full w-full">
       {/* Main panel - same glass style as full state */}
-      <div className="flex-1 rounded-xl bg-[#17252A]/95 backdrop-blur-md border border-white/10 shadow-[0_8_60px_rgba(0,0,0,0.6)] px-7 py-7 flex flex-col items-center justify-center relative overflow-hidden">
+      <div className="h-full rounded-xl bg-[#17252A]/95 backdrop-blur-md border border-white/10 shadow-[0_8_60px_rgba(0,0,0,0.6)] px-7 py-7 flex flex-col items-center justify-center relative overflow-hidden">
         
         {/* Subtle background pattern */}
         <div className="absolute inset-0 opacity-[0.03]" style={{
@@ -76,13 +118,12 @@ export function NpcEmptyState() {
         
         {/* Centered minimal content */}
         <div className="relative flex flex-col items-center text-center gap-4">
-          {/* Animated d20 icon with glow */}
+          {/* Large animated dice icon with glow */}
           <div className="relative">
-            <div className="absolute inset-0 bg-[#3AAFA9]/20 blur-xl rounded-full scale-150" />
-            <img 
-              src="/roll_white.svg" 
-              alt="" 
-              className="relative w-12 h-12 opacity-60 drop-shadow-[0_0_8px_rgba(58,175,169,0.3)]"
+            <div className="absolute inset-0 bg-[#3AAFA9]/20 blur-2xl rounded-full scale-150" />
+            <Dices 
+              className="relative w-16 h-16 text-white/70 drop-shadow-[0_0_12px_rgba(58,175,169,0.4)] animate-pulse"
+              style={{ animationDuration: '3s' }}
             />
           </div>
           
@@ -93,7 +134,7 @@ export function NpcEmptyState() {
           
           {/* Subtitle */}
           <p className="text-sm text-[#DEF2F1]/50 max-w-[320px] leading-relaxed">
-            Roll the dice to summon a unique character with personality, voice, and story hooks ready for your table.
+            Click the  Roll NPC button on the left to summon a new character.
           </p>
           
           {/* Decorative hint */}
@@ -123,6 +164,7 @@ type NpcDetailPanelProps = {
   rumor: string;
   line1: string;
   line2: string;
+  onRollAnother?: () => void;
 };
 
 export function NpcDetailPanel({
@@ -140,13 +182,48 @@ export function NpcDetailPanel({
   rumor,
   line1,
   line2,
+  onRollAnother,
 }: NpcDetailPanelProps) {
-  // Color palette from README:
-  // Dark Blue (#17252A), Teal (#3AAFA9), Dark Teal (#2B7A78), Light Blue (#DEF2F1), White (#FEFFFF)
-  const moralityColor = {
-    Good: "text-[#3AAFA9]",      // Teal
-    Neutral: "text-white/60",
-    Evil: "text-[#2B7A78]",      // Dark Teal (subtle distinction)
+  const [copied, setCopied] = React.useState(false);
+
+  const copyToClipboard = async () => {
+    const formattedText = `
+${name}
+${race} · ${profession} · ${morality}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+OVERVIEW
+${description}${tagline ? `\n"${tagline}"` : ''}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+WHAT DEFINES THEM
+
+Look: ${look}
+Personality: ${personality}
+History: ${history}
+Voice: ${voice}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+AT THE TABLE
+
+Hook: ${hook}
+Rumor: ${rumor}
+
+Lines:
+• "${line1}"
+• "${line2}"
+`.trim();
+
+    try {
+      await navigator.clipboard.writeText(formattedText);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      console.error('Failed to copy:', err);
+    }
   };
 
   // Animation variants for staggered children
@@ -175,7 +252,7 @@ export function NpcDetailPanel({
   return (
     <motion.section
       key={name}
-      className="flex-1 min-w-0"
+      className="h-full"
       initial="hidden"
       animate="visible"
       variants={containerVariants}
@@ -192,13 +269,49 @@ export function NpcDetailPanel({
         <div className="relative z-10 h-full rounded-xl bg-[#17252A] backdrop-blur-md border border-white/10 shadow-[0_8_60px_rgba(0,0,0,0.6)] px-7 py-7 flex flex-col gap-6">
         
         {/* 1) HEADER */}
-        <motion.header variants={childVariants}>
-          <h2 className="text-3xl font-bold text-[#FEFFFF] font-display mb-1">
-            {name}
-          </h2>
-          <p className="text-sm text-[#DEF2F1]/70">
-            {race} · {profession} · {morality}
-          </p>
+        <motion.header variants={childVariants} className="flex items-start justify-between gap-4">
+          <div>
+            <h2 className="text-3xl font-bold text-[#FEFFFF] font-display mb-1">
+              {name}
+            </h2>
+            <p className="text-sm text-[#DEF2F1]/70">
+              {race} · {profession} · {morality}
+            </p>
+          </div>
+          
+          {/* Action buttons */}
+          <div className="flex items-center gap-2 flex-shrink-0">
+            {/* Copy to Clipboard */}
+            <button
+              onClick={copyToClipboard}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 border border-white/10 hover:border-white/20 text-[#DEF2F1]/80 hover:text-[#FEFFFF] text-xs font-medium transition-all duration-200"
+              title="Copy NPC to clipboard"
+            >
+              {copied ? (
+                <>
+                  <Check className="w-3.5 h-3.5 text-[#3AAFA9]" />
+                  <span className="text-[#3AAFA9]">Copied!</span>
+                </>
+              ) : (
+                <>
+                  <Copy className="w-3.5 h-3.5" />
+                  <span>Copy</span>
+                </>
+              )}
+            </button>
+            
+            {/* Roll Another */}
+            {onRollAnother && (
+              <button
+                onClick={onRollAnother}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#3AAFA9]/20 hover:bg-[#3AAFA9]/30 border border-[#3AAFA9]/30 hover:border-[#3AAFA9]/50 text-[#3AAFA9] hover:text-[#FEFFFF] text-xs font-medium transition-all duration-200"
+                title="Roll another NPC"
+              >
+                <RotateCcw className="w-3.5 h-3.5" />
+                <span>Roll Another</span>
+              </button>
+            )}
+          </div>
         </motion.header>
 
         {/* 2) SECTION: OVERVIEW */}

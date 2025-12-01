@@ -18,48 +18,52 @@ type RawNpc = {
   line_1: string;
   line_2: string;
   rumor: string;
+  tagline?: string;
 };
 
+// NPC type matching what the frontend card expects
 export type Npc = {
   id: string;
-  race: string;
-  sex: string;
-  alignment: string;
   name: string;
-  surname: string;
+  race: string;
+  profession: string;
+  morality: "Good" | "Neutral" | "Evil";
   description: string;
+  tagline?: string;
+  look: string;
   personality: string;
   history: string;
-  motivation: string;
   voice: string;
-  hooks: string[];
-  lines: string[];
-  rumor?: string;
+  hook: string;
+  rumor: string;
+  line1: string;
+  line2: string;
 };
 
 // Transform raw data to match expected format
 const rawNpcs = npcData as RawNpc[];
 const npcs: Npc[] = rawNpcs.map((raw) => ({
   id: raw.id,
+  name: `${raw.name}${raw.surname ? ` ${raw.surname}` : ''}`,
   race: raw.race,
-  sex: "Male", // Default - we don't have this field in pack01
-  alignment: raw.morality,
-  name: raw.name,
-  surname: raw.surname,
+  profession: raw.profession,
+  morality: raw.morality as "Good" | "Neutral" | "Evil",
   description: raw.description,
+  tagline: raw.tagline,
+  look: raw.look,
   personality: raw.personality,
   history: raw.history,
-  motivation: raw.hook, // Using hook as motivation
   voice: raw.voice,
+  hook: raw.hook,
   rumor: raw.rumor,
-  hooks: [raw.hook],
-  lines: [raw.line_1, raw.line_2].filter(Boolean),
+  line1: raw.line_1,
+  line2: raw.line_2,
 }));
 
 export type NpcFilters = {
   race?: string | null;
-  sex?: string | null;
-  alignment?: string | null;
+  morality?: string | null;
+  profession?: string | null;
 };
 
 function matchesFilter(value: string, filter?: string | null) {
@@ -70,8 +74,8 @@ function matchesFilter(value: string, filter?: string | null) {
 export function getFilteredNpcs(filters: NpcFilters): Npc[] {
   return npcs.filter((npc) => {
     if (!matchesFilter(npc.race, filters.race)) return false;
-    if (!matchesFilter(npc.sex, filters.sex)) return false;
-    if (!matchesFilter(npc.alignment, filters.alignment)) return false;
+    if (!matchesFilter(npc.morality, filters.morality)) return false;
+    if (!matchesFilter(npc.profession, filters.profession)) return false;
     return true;
   });
 }
@@ -96,26 +100,18 @@ export function getAllRaces(): string[] {
   return Array.from(races).sort();
 }
 
-export function getAllSexes(): string[] {
-  const sexes = new Set<string>();
+export function getAllMoralities(): string[] {
+  const moralities = new Set<string>();
   for (const npc of npcs) {
-    sexes.add(npc.sex);
+    moralities.add(npc.morality);
   }
-  return Array.from(sexes).sort();
-}
-
-export function getAllAlignments(): string[] {
-  const alignments = new Set<string>();
-  for (const npc of npcs) {
-    alignments.add(npc.alignment);
-  }
-  return Array.from(alignments).sort();
+  return Array.from(moralities).sort();
 }
 
 export function getAllProfessions(): string[] {
   const professions = new Set<string>();
-  for (const raw of rawNpcs) {
-    professions.add(raw.profession);
+  for (const npc of npcs) {
+    professions.add(npc.profession);
   }
   return Array.from(professions).sort();
 }
