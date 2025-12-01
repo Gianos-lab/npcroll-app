@@ -1,6 +1,16 @@
 
 @import "tailwindcss";
 
+/* Fix React touch events on iOS/iPad */
+* {
+	-webkit-tap-highlight-color: transparent;
+}
+
+button, [role="button"], a, label, input, select, textarea {
+	touch-action: manipulation;
+	-webkit-touch-callout: none;
+}
+
 /* Prevent page shift when Select/Dropdown opens */
 html {
 	overflow-y: scroll;

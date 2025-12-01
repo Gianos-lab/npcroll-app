@@ -119,7 +119,6 @@ export default function Home() {
         backgroundImage: 'url(/texture.jpg)',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
-        backgroundAttachment: 'fixed',
       }}
     >
       {/* Header - Solo Logo */}
@@ -154,16 +153,26 @@ export default function Home() {
                 <h1 className="font-display text-2xl font-bold text-white sm:text-3xl">Need an NPC? Roll one</h1>
               </div>
 
-              <div className="flex items-center gap-2 mb-2">
-                <h2 className="text-sm font-semibold text-white/80">Current Pack</h2>
-                <InfoTooltip
-                  content={
-                    <span className="text-sm">NPCs are curated in Packs. Each Pack blends its own mix of races, professions, and personalities.
+              {/* Current Pack Header - Desktop: with tooltip, Mobile: with static text */}
+              <div className="mb-2">
+                <div className="flex items-center gap-2">
+                  <h2 className="text-sm font-semibold text-white/80">Current Pack</h2>
+                  {/* Tooltip only on md+ screens */}
+                  <div className="hidden md:inline-flex">
+                    <InfoTooltip
+                      content={
+                        <span className="text-sm">NPCs are curated in Packs. Each Pack blends its own mix of races, professions, and personalities.
 This early build holds only one pack — but worry not, more are brewing.</span>
-                  }
-                >
-                  <Info className="w-4 h-4" />
-                </InfoTooltip>
+                      }
+                    >
+                      <Info className="w-4 h-4" />
+                    </InfoTooltip>
+                  </div>
+                </div>
+                {/* Static text only on small screens */}
+                <p className="text-xs text-white/50 mt-1 md:hidden">
+                  NPCs are curated in Packs. This early build has just one — more are brewing.
+                </p>
               </div>
 
               {/* Chosen Pack Card */}

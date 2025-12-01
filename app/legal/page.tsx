@@ -97,7 +97,7 @@ export default function LegalPage() {
                   <h3 className="text-white/90 font-semibold mt-4">What we collect</h3>
                   <ul className="list-disc pl-5 space-y-2">
                     <li>
-                      <strong className="text-white/90">Feedback form:</strong> If you submit feedback, we receive your message and optionally your email (only if you provide it).
+                      <strong className="text-white/90">Feedback form:</strong> If you submit feedback, we receive your message and optionally your email (only if you provide it). We use FormSubmit to safely deliver your message to our inbox. Your message and (optionally) your email are sent to us through their service, but we do not store this data anywhere else.
                     </li>
                     <li>
                       <strong className="text-white/90">Analytics:</strong> We use privacy-friendly analytics to understand general usage patterns (page views, button clicks). No personal data is tracked.
