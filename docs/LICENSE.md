@@ -43,7 +43,7 @@ This public repository *does not include*:
 - Internal generation pipelines  
 - Content packs  
 - AI prompts  
-- Hook templates  
+- Motivation templates  
 - Validation logic  
 - NPC library data  
 

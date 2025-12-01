@@ -39,9 +39,9 @@ export function NpcLoadingState() {
   }, []);
 
   return (
-    <section className="h-full w-full">
+    <section className="w-full">
       {/* Main panel - same glass style as full state */}
-      <div className="h-full rounded-xl bg-[#17252A]/95 backdrop-blur-md border border-white/10 shadow-[0_8_60px_rgba(0,0,0,0.6)] px-7 py-7 flex flex-col gap-6">
+      <div className="rounded-xl bg-[#17252A]/95 backdrop-blur-md border border-white/10 shadow-[0_8_60px_rgba(0,0,0,0.6)] px-7 py-7 flex flex-col gap-6">
         
         {/* Loading message at top */}
         <div className="flex items-center gap-3 mb-2">
@@ -107,7 +107,7 @@ export function NpcLoadingState() {
  */
 export function NpcEmptyState() {
   return (
-    <section className="h-full w-full">
+    <section className="w-full h-full">
       {/* Main panel - same glass style as full state */}
       <div className="h-full rounded-xl bg-[#17252A]/95 backdrop-blur-md border border-white/10 shadow-[0_8_60px_rgba(0,0,0,0.6)] px-7 py-7 flex flex-col items-center justify-center relative overflow-hidden">
         
@@ -160,7 +160,7 @@ type NpcDetailPanelProps = {
   personality: string;
   history: string;
   voice: string;
-  hook: string;
+  motivation: string;
   rumor: string;
   line1: string;
   line2: string;
@@ -178,7 +178,7 @@ export function NpcDetailPanel({
   personality,
   history,
   voice,
-  hook,
+  motivation,
   rumor,
   line1,
   line2,
@@ -209,7 +209,7 @@ Voice: ${voice}
 
 AT THE TABLE
 
-Hook: ${hook}
+Motivation: ${motivation}
 Rumor: ${rumor}
 
 Lines:
@@ -252,13 +252,12 @@ Lines:
   return (
     <motion.section
       key={name}
-      className="h-full"
       initial="hidden"
       animate="visible"
       variants={containerVariants}
     >
       {/* Border beam wrapper - frames the entire NPC panel */}
-      <div className="relative h-full">
+      <div className="relative">
         <BorderBeam 
           duration={6} 
           colorFrom="#3AAFA9" 
@@ -266,7 +265,7 @@ Lines:
         />
         
         {/* Main panel - inverted glass style: darker, more prominent - z-10 to sit above beam */}
-        <div className="relative z-10 h-full rounded-xl bg-[#17252A] backdrop-blur-md border border-white/10 shadow-[0_8_60px_rgba(0,0,0,0.6)] px-7 py-7 flex flex-col gap-6">
+        <div className="relative z-10 rounded-xl bg-[#17252A] backdrop-blur-md border border-white/10 shadow-[0_8_60px_rgba(0,0,0,0.6)] px-7 py-7 flex flex-col gap-6">
         
         {/* 1) HEADER */}
         <motion.header variants={childVariants} className="flex items-start justify-between gap-4">
@@ -369,19 +368,19 @@ Lines:
         </motion.section>
 
         {/* 4) SECTION: AT THE TABLE */}
-        <motion.section className="mt-auto" variants={childVariants}>
+        <motion.section variants={childVariants}>
           <h3 className="text-[11px] font-semibold tracking-[0.14em] text-[#DEF2F1]/50 uppercase mb-3">
             At the table
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-            {/* Card 1: HOOK */}
+            {/* Card 1: MOTIVATION */}
             <div className="relative rounded-lg bg-white/5 border border-white/10 p-4">
               <div className="absolute left-0 top-0 bottom-0 w-[3px] rounded-l-lg bg-[#3AAFA9]/70" />
               <p className="text-[10px] font-semibold tracking-[0.14em] text-[#3AAFA9] uppercase mb-2 pl-2">
-                Hook
+                Motivation
               </p>
               <p className="text-[13px] text-[#FEFFFF]/80 leading-relaxed pl-2">
-                {hook}
+                {motivation}
               </p>
             </div>
 

@@ -26,7 +26,7 @@ type Npc = {
   personality: string;
   history: string;
   voice: string;
-  hook: string;
+  motivation: string;
   rumor: string;
   line1: string;
   line2: string;
@@ -109,9 +109,9 @@ export default function Home() {
 
       {/* Main Content */}
       <main className="flex-1 flex items-center py-8 overflow-hidden">
-        <div className="w-full max-w-7xl mx-auto flex gap-10 px-8 items-stretch">
-          {/* LEFT COLUMN - fixed width, stretches to match right */}
-          <aside className="w-[480px] flex-shrink-0 flex">
+        <div className={`w-full max-w-7xl mx-auto flex gap-10 px-8 ${!currentNpc && !isLoading ? 'items-stretch' : 'items-start'}`}>
+          {/* LEFT COLUMN - fixed width */}
+          <aside className={`w-[480px] flex-shrink-0 ${!currentNpc && !isLoading ? 'flex' : ''}`}>
             {/* Try it yourself Card */}
             <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-xl p-6 space-y-5 w-full">
               {/* Hero Text */}
@@ -246,20 +246,20 @@ This early build holds only one pack — but worry not, more are brewing.</span>
                         <Label htmlFor="prof-all" className="text-sm text-white/80 cursor-pointer">All Professions</Label>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="Merchant" id="prof-merchant" className="border-white/40 text-teal-400" />
-                        <Label htmlFor="prof-merchant" className="text-sm text-white/80 cursor-pointer">Merchant</Label>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="Guard" id="prof-guard" className="border-white/40 text-teal-400" />
-                        <Label htmlFor="prof-guard" className="text-sm text-white/80 cursor-pointer">Guard</Label>
-                      </div>
-                      <div className="flex items-center space-x-2">
                         <RadioGroupItem value="Farmer" id="prof-farmer" className="border-white/40 text-teal-400" />
                         <Label htmlFor="prof-farmer" className="text-sm text-white/80 cursor-pointer">Farmer</Label>
                       </div>
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem value="Innkeeper" id="prof-innkeeper" className="border-white/40 text-teal-400" />
                         <Label htmlFor="prof-innkeeper" className="text-sm text-white/80 cursor-pointer">Innkeeper</Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="Merchant" id="prof-merchant" className="border-white/40 text-teal-400" />
+                        <Label htmlFor="prof-merchant" className="text-sm text-white/80 cursor-pointer">Merchant</Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="Priest" id="prof-priest" className="border-white/40 text-teal-400" />
+                        <Label htmlFor="prof-priest" className="text-sm text-white/80 cursor-pointer">Priest</Label>
                       </div>
                     </RadioGroup>
                   </CollapsibleContent>
@@ -268,8 +268,8 @@ This early build holds only one pack — but worry not, more are brewing.</span>
             </div>
           </aside>
 
-          {/* RIGHT COLUMN - fills remaining space, matches left height */}
-          <div className="flex-1 min-w-0 flex">
+          {/* RIGHT COLUMN - fills remaining space */}
+          <div className={`flex-1 min-w-0 ${!currentNpc && !isLoading ? 'flex' : ''}`}>
             {isLoading ? (
               <NpcLoadingState />
             ) : currentNpc ? (
@@ -286,7 +286,7 @@ This early build holds only one pack — but worry not, more are brewing.</span>
         <div className="max-w-7xl mx-auto px-4 py-6">
           <div className="flex flex-col md:flex-row items-center md:items-center justify-between gap-3 text-white/80 text-sm">
             <div className="md:flex-1 md:text-left text-center">
-              NPCRoll is a curated library of NPCs with unique personality, voice and hooks. Ready to use at your table.
+              NPCRoll is a curated library of NPCs with unique personality, voice and motivations. Ready to use at your table.
             </div>
 
             <div className="flex items-center gap-4 mt-2 md:mt-0">

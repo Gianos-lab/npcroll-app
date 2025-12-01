@@ -12,7 +12,7 @@ type RawNpc = {
   description: string;
   look: string;
   personality: string;
-  hook: string;
+  motivation: string;
   history: string;
   voice: string;
   line_1: string;
@@ -34,7 +34,7 @@ export type Npc = {
   personality: string;
   history: string;
   voice: string;
-  hook: string;
+  motivation: string;
   rumor: string;
   line1: string;
   line2: string;
@@ -54,7 +54,7 @@ const npcs: Npc[] = rawNpcs.map((raw) => ({
   personality: raw.personality,
   history: raw.history,
   voice: raw.voice,
-  hook: raw.hook,
+  motivation: raw.motivation,
   rumor: raw.rumor,
   line1: raw.line_1,
   line2: raw.line_2,
