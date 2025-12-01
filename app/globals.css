@@ -1,9 +1,20 @@
 
 @import "tailwindcss";
 
+/* Prevent page shift when Select/Dropdown opens */
+html {
+	overflow-y: scroll;
+	scrollbar-gutter: stable;
+}
 
 body, .font-body {
 	font-family: 'Lora', serif;
+}
+
+/* Prevent Radix from hiding overflow on body */
+body[data-scroll-locked] {
+	overflow: auto !important;
+	margin-right: 0 !important;
 }
 
 .font-display {

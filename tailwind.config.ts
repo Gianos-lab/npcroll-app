@@ -142,6 +142,11 @@ const config: Config = {
           "0%": { transform: "translateX(0.5rem)" },
           "100%": { transform: "translateX(0)" },
         },
+        "border-beam": {
+          "100%": {
+            "offset-distance": "100%",
+          },
+        },
       },
       animation: {
         "in": "in 0.2s ease-out",
@@ -164,6 +169,7 @@ const config: Config = {
         "slide-in-from-bottom-2": "slide-in-from-bottom-2 0.2s ease-out",
         "slide-in-from-left-2": "slide-in-from-left-2 0.2s ease-out",
         "slide-in-from-right-2": "slide-in-from-right-2 0.2s ease-out",
+        "border-beam": "border-beam var(--duration) infinite linear",
       },
     },
   },

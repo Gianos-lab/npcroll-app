@@ -22,21 +22,93 @@ import {
 } from "@/components/ui/select";
 import { InfoTooltip } from "@/components/info-tooltip";
 import { Info } from "lucide-react";
-import { NpcDetailPanel } from "@/components/npc-detail-panel";
+import { NpcDetailPanel, NpcEmptyState, NpcLoadingState } from "@/components/npc-detail-panel";
+
+// NPC type for the fetched data
+type Npc = {
+  name: string;
+  race: string;
+  profession: string;
+  morality: "Good" | "Neutral" | "Evil";
+  description: string;
+  tagline?: string;
+  look: string;
+  personality: string;
+  history: string;
+  voice: string;
+  hook: string;
+  rumor: string;
+  line1: string;
+  line2: string;
+};
+
+// Fetch NPC with minimum delay for UX
+async function fetchNpc(filters?: { race?: string; morality?: string; profession?: string }): Promise<Npc> {
+  const start = Date.now();
+  
+  const params = new URLSearchParams();
+  if (filters?.race && filters.race !== 'all-races') params.set('race', filters.race);
+  if (filters?.morality && filters.morality !== 'all-moralities') params.set('morality', filters.morality);
+  if (filters?.profession && filters.profession !== 'all-professions') params.set('profession', filters.profession);
+  
+  const url = `/api/npc${params.toString() ? `?${params.toString()}` : ''}`;
+  const res = await fetch(url);
+  
+  if (!res.ok) {
+    throw new Error('Failed to fetch NPC');
+  }
+  
+  const npc = (await res.json()) as Npc;
+
+  // Ensure minimum delay for better UX
+  const MIN_DELAY_MS = 2500;
+  const elapsed = Date.now() - start;
+  if (elapsed < MIN_DELAY_MS) {
+    await new Promise((resolve) =>
+      setTimeout(resolve, MIN_DELAY_MS - elapsed)
+    );
+  }
+
+  return npc;
+}
 
 export default function Home() {
   const [isPackExpanded, setIsPackExpanded] = useState(false);
   const [isRaceOpen, setIsRaceOpen] = useState(true);
   const [isMoralityOpen, setIsMoralityOpen] = useState(true);
   const [isProfessionOpen, setIsProfessionOpen] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const [currentNpc, setCurrentNpc] = useState<Npc | null>(null);
+  
+  // Filter states
+  const [selectedRace, setSelectedRace] = useState("all-races");
+  const [selectedMorality, setSelectedMorality] = useState("all-moralities");
+  const [selectedProfession, setSelectedProfession] = useState("all-professions");
+
+  // Handle roll NPC
+  const handleRollNpc = async () => {
+    setIsLoading(true);
+    try {
+      const npc = await fetchNpc({
+        race: selectedRace,
+        morality: selectedMorality,
+        profession: selectedProfession,
+      });
+      setCurrentNpc(npc);
+    } catch (error) {
+      console.error('Failed to fetch NPC:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
-    <div className="min-h-screen flex flex-col" style={{ backgroundImage: 'url(/texture.jpg)', backgroundSize: 'cover', backgroundPosition: 'center' }}>
+    <div className="min-h-screen flex flex-col" style={{ backgroundImage: 'url(/texture.jpg)', backgroundSize: 'cover', backgroundPosition: 'center', backgroundAttachment: 'fixed' }}>
       {/* Header - Solo Logo */}
       <header className="bg-white/10 backdrop-blur-md border-b border-white/20 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 py-2 flex items-center justify-between" style={{ minHeight: '56px' }}>
           <div className="flex items-center gap-2">
-            <img src="/logo.svg" alt="NPCRoll Logo" className="w-16 h-16" />
+            <img src="/logo_nav.svg" alt="NPCRoll Logo" className="w-16 h-16" />
           </div>
           <nav className="flex items-center gap-6">
             <ExternalLinkButton text="Feedback" />
@@ -45,10 +117,10 @@ export default function Home() {
       </header>
 
       {/* Main Content */}
-      <main className="flex-1 flex items-center">
-        <div className="w-full max-w-7xl mx-auto flex gap-10 p-8">
+      <main className="flex-1 flex items-start py-8 overflow-hidden">
+        <div className="w-full max-w-7xl mx-auto flex gap-10 px-8 h-full">
           {/* LEFT COLUMN */}
-          <aside className="w-[460px] max-w-full flex-shrink-0 space-y-6">
+          <aside className="w-[460px] max-w-full flex-shrink-0 space-y-6 self-start">
             {/* Try it yourself Card */}
             <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-xl p-7 space-y-6 w-full">
               {/* Hero Text */}
@@ -90,11 +162,15 @@ export default function Home() {
 
               {/* Generate Button */}
               <div className="flex justify-center">
-                <button className="group relative overflow-hidden rounded-lg bg-[#D4AF6A] px-6 py-3 transition-all shadow-lg shadow-[#D4AF6A]/30">
+                <button 
+                  onClick={handleRollNpc}
+                  disabled={isLoading}
+                  className="group relative overflow-hidden rounded-lg bg-[#D4AF6A] px-6 py-3 transition-all shadow-lg shadow-[#D4AF6A]/30 disabled:opacity-60 disabled:cursor-not-allowed"
+                >
                   <span className="absolute bottom-0 left-0 h-48 w-full origin-bottom translate-y-full transform overflow-hidden rounded-lg bg-white/15 transition-all duration-300 ease-out group-hover:translate-y-14"></span>
                   <div className="relative flex items-center justify-center gap-2">
-                    <img src="/roll.svg" alt="dice" className="w-6 h-6" />
-                    <span className="font-display font-bold text-sm text-slate-900">ROLL NPC</span>
+                    <img src="/roll.svg" alt="dice" className={`w-6 h-6 ${isLoading ? 'animate-spin' : ''}`} style={isLoading ? { animationDuration: '1s' } : undefined} />
+                    <span className="font-display font-bold text-sm text-slate-900">{isLoading ? 'ROLLING...' : 'ROLL NPC'}</span>
                   </div>
                 </button>
               </div>
@@ -110,17 +186,17 @@ export default function Home() {
                     <ChevronDown className={`h-4 w-4 text-white/60 transition-transform ${isRaceOpen ? 'rotate-180' : ''}`} />
                   </CollapsibleTrigger>
                   <CollapsibleContent className="pt-3 px-2">
-                    <RadioGroup defaultValue="all-races" className="space-y-2">
+                    <RadioGroup value={selectedRace} onValueChange={setSelectedRace} className="space-y-2">
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem value="all-races" id="race-all" className="border-white/40 text-teal-400" />
                         <Label htmlFor="race-all" className="text-sm text-white/80 cursor-pointer">All Races</Label>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="human" id="race-human" className="border-white/40 text-teal-400" />
+                        <RadioGroupItem value="Human" id="race-human" className="border-white/40 text-teal-400" />
                         <Label htmlFor="race-human" className="text-sm text-white/80 cursor-pointer">Human</Label>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="halfling" id="race-halfling" className="border-white/40 text-teal-400" />
+                        <RadioGroupItem value="Halfling" id="race-halfling" className="border-white/40 text-teal-400" />
                         <Label htmlFor="race-halfling" className="text-sm text-white/80 cursor-pointer">Halfling</Label>
                       </div>
                     </RadioGroup>
@@ -134,21 +210,21 @@ export default function Home() {
                     <ChevronDown className={`h-4 w-4 text-white/60 transition-transform ${isMoralityOpen ? 'rotate-180' : ''}`} />
                   </CollapsibleTrigger>
                   <CollapsibleContent className="pt-3 px-2">
-                    <RadioGroup defaultValue="all" className="space-y-2">
+                    <RadioGroup value={selectedMorality} onValueChange={setSelectedMorality} className="space-y-2">
                       <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="all" id="morality-all" className="border-white/40 text-teal-400" />
+                        <RadioGroupItem value="all-moralities" id="morality-all" className="border-white/40 text-teal-400" />
                         <Label htmlFor="morality-all" className="text-sm text-white/80 cursor-pointer">All</Label>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="good" id="morality-good" className="border-white/40 text-teal-400" />
+                        <RadioGroupItem value="Good" id="morality-good" className="border-white/40 text-teal-400" />
                         <Label htmlFor="morality-good" className="text-sm text-white/80 cursor-pointer">Good</Label>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="neutral" id="morality-neutral" className="border-white/40 text-teal-400" />
+                        <RadioGroupItem value="Neutral" id="morality-neutral" className="border-white/40 text-teal-400" />
                         <Label htmlFor="morality-neutral" className="text-sm text-white/80 cursor-pointer">Neutral</Label>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="evil" id="morality-evil" className="border-white/40 text-teal-400" />
+                        <RadioGroupItem value="Evil" id="morality-evil" className="border-white/40 text-teal-400" />
                         <Label htmlFor="morality-evil" className="text-sm text-white/80 cursor-pointer">Evil</Label>
                       </div>
                     </RadioGroup>
@@ -162,25 +238,25 @@ export default function Home() {
                     <ChevronDown className={`h-4 w-4 text-white/60 transition-transform ${isProfessionOpen ? 'rotate-180' : ''}`} />
                   </CollapsibleTrigger>
                   <CollapsibleContent className="pt-3 px-2">
-                    <RadioGroup defaultValue="all-professions" className="space-y-2">
+                    <RadioGroup value={selectedProfession} onValueChange={setSelectedProfession} className="space-y-2">
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem value="all-professions" id="prof-all" className="border-white/40 text-teal-400" />
                         <Label htmlFor="prof-all" className="text-sm text-white/80 cursor-pointer">All Professions</Label>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="merchant" id="prof-merchant" className="border-white/40 text-teal-400" />
+                        <RadioGroupItem value="Merchant" id="prof-merchant" className="border-white/40 text-teal-400" />
                         <Label htmlFor="prof-merchant" className="text-sm text-white/80 cursor-pointer">Merchant</Label>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="guard" id="prof-guard" className="border-white/40 text-teal-400" />
+                        <RadioGroupItem value="Guard" id="prof-guard" className="border-white/40 text-teal-400" />
                         <Label htmlFor="prof-guard" className="text-sm text-white/80 cursor-pointer">Guard</Label>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="farmer" id="prof-farmer" className="border-white/40 text-teal-400" />
+                        <RadioGroupItem value="Farmer" id="prof-farmer" className="border-white/40 text-teal-400" />
                         <Label htmlFor="prof-farmer" className="text-sm text-white/80 cursor-pointer">Farmer</Label>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="innkeeper" id="prof-innkeeper" className="border-white/40 text-teal-400" />
+                        <RadioGroupItem value="Innkeeper" id="prof-innkeeper" className="border-white/40 text-teal-400" />
                         <Label htmlFor="prof-innkeeper" className="text-sm text-white/80 cursor-pointer">Innkeeper</Label>
                       </div>
                     </RadioGroup>
@@ -191,21 +267,13 @@ export default function Home() {
           </aside>
 
           {/* RIGHT COLUMN */}
-          <NpcDetailPanel
-            name="Tamley Duskpot"
-            race="Halfling"
-            profession="Farmer"
-            morality="Evil"
-            description="A stout halfling with sun-darkened skin and a perpetual half-smile. He tends his modest patch of land with obsessive care, but whispers in the village suggest his crops thrive a little too well—especially when his neighbors' fail."
-            look="Weather-beaten face, calloused hands, and a straw hat that never leaves his head. His overalls are always spotless despite his trade."
-            personality="Outwardly jovial and helpful, but his eyes never quite match his smile. He hoards grudges like seeds and plants them with equal patience."
-            history="Arrived in the village a decade ago after 'unfortunate circumstances' in his previous home. No one knows the details, and Tamley isn't telling."
-            voice="Soft and sing-song, with an unsettling habit of humming while he works. His accent is hard to place."
-            hook="Tamley approaches the party with a 'small favor': he needs someone to deliver a sealed package to a farm three villages over. He'll pay well, but insists they must not open it under any circumstances."
-            rumor="They say Tamley's previous neighbor died after a bitter dispute over a fence line. The official story was 'natural causes,' but the body was never found."
-            line1="Oh, what a shame about your beans this year... Mine are coming in just fine, though. Funny how that works."
-            line2="I'd invite you in for tea, but I'm afraid I just can't trust strangers. You understand."
-          />
+          {isLoading ? (
+            <NpcLoadingState />
+          ) : currentNpc ? (
+            <NpcDetailPanel {...currentNpc} />
+          ) : (
+            <NpcEmptyState />
+          )}
         </div>
       </main>
 
