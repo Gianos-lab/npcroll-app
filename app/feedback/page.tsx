@@ -1,230 +1,198 @@
 "use client";
 
+import { useState } from "react";
+import { ArrowLeft, Send, CheckCircle } from "lucide-react";
+import Link from "next/link";
+
 export default function FeedbackPage() {
-  const cardStyle = {
-    width: "100%",
-    maxWidth: "1120px",
-    margin: "8px auto 32px",
-    padding: "32px 24px 36px",
-    borderRadius: "18px",
-    border: "1px solid var(--border)",
-    background: "#e3f3f2",
-    boxShadow: "0 12px 30px rgba(15, 31, 34, 0.55)",
-  } as const;
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const titleStyle = {
-    fontFamily: "'Germania One', serif",
-    fontSize: "2.6rem",
-    marginBottom: "0.6rem",
-    color: "#13292A",
-    textAlign: "center" as const,
-  };
-
-  const subtitleStyle = {
-    fontFamily: "'Lora', serif",
-    fontSize: "1.05rem",
-    lineHeight: 1.7,
-    marginBottom: "1.8rem",
-    color: "#0b1517",
-    textAlign: "center" as const,
-  };
-
-  const labelStyle = {
-    display: "block",
-    fontSize: "0.95rem",
-    letterSpacing: "0.06em",
-    textTransform: "uppercase" as const,
-    fontWeight: 700,
-    marginBottom: "0.35rem",
-    color: "#13292A",
-    fontFamily: "'Germania One', serif",
-
-
-
-
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsSubmitting(true);
     
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+    
+    try {
+      await fetch("https://formsubmit.co/ajax/gianosdm@gmail.com", {
+        method: "POST",
+        body: formData,
+      });
+      setIsSubmitted(true);
+    } catch (error) {
+      console.error("Failed to submit feedback:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
-
-  const inputBase = {
-    width: "100%",
-    borderRadius: "10px",
-    border: "1px solid rgba(35, 60, 70, 0.35)",
-    padding: "0.6rem 0.8rem",
-    fontSize: "0.95rem",
-    fontFamily: "'Lora', serif",
-    outline: "none",
-    backgroundColor: "#ffffff",
-    boxShadow: "0 3px 10px rgba(0, 0, 0, 0.06)",
-    color: "#0b1517",
-  } as const;
-
-  const textareaStyle = {
-    ...inputBase,
-    resize: "vertical" as const,
-    minHeight: "90px",
-  };
-
-  const buttonStyle = {
-    marginTop: "0.6rem",
-    display: "inline-flex",
-    alignItems: "center",
-    justifyContent: "center",
-    padding: "0.7rem 1.6rem",
-    borderRadius: "12px",
-    border: "none",
-    background: "#17252A",
-    color: "#F2FFFD",
-    fontWeight: 600,
-    fontSize: "0.9rem",
-    cursor: "pointer",
-    fontFamily: "'Germania One', serif",
-    letterSpacing: "0.05em",
-    boxShadow: "0 6px 20px rgba(0, 0, 0, 0.35)",
-  } as const;
-
-  const smallTextStyle = {
-    fontSize: "0.8rem",
-    color: "var(--text-muted)",
-    marginTop: "0.7rem",
-    lineHeight: 1.4,
-    fontFamily: "'Lora', serif",
-  } as const;
 
   return (
-    <div className="page-root">
-    <main
-      style={{
-        minHeight: "100vh",
-        padding: "24px 12px 32px",
-        boxSizing: "border-box",
-        display: "flex",
-        justifyContent: "center",
+    <div 
+      className="min-h-screen flex flex-col"
+      style={{ 
+        backgroundImage: 'url(/texture.jpg)', 
+        backgroundSize: 'cover', 
+        backgroundPosition: 'center', 
+        backgroundAttachment: 'fixed' 
       }}
     >
+      {/* Header */}
+      <header className="bg-white/10 backdrop-blur-md border-b border-white/20 sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-4 py-2 flex items-center justify-between" style={{ minHeight: '56px' }}>
+          <Link href="/" className="flex items-center gap-2">
+            <img src="/logo_nav.svg" alt="NPCRoll Logo" className="w-16 h-16" />
+          </Link>
+          <nav className="flex items-center gap-6">
+            <Link 
+              href="/"
+              className="flex items-center gap-2 text-white/80 hover:text-white transition-colors text-sm"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              Back to Roll
+            </Link>
+          </nav>
+        </div>
+      </header>
 
-      <div className="fade-in-card" style={cardStyle}>
-        <header style={{ textAlign: "center" }}>
-          <a
-            href="/"
-            style={{
-              display: "block",
-              width: "fit-content",
-              margin: "0 auto 14px",
-            }}
-          >
-            <img
-              src="/logo.svg"
-              alt="NPCRoll Logo"
-              style={{
-                width: "72px",
-                height: "auto",
-                display: "block",
-                opacity: 0.95,
-              }}
-            />
-          </a>
+      {/* Main Content */}
+      <main className="flex-1 flex items-center justify-center py-12 px-4">
+        <div className="w-full max-w-[600px]">
+          {/* Dark Glass Card */}
+          <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-xl p-8">
+            {/* Header */}
+            <div className="text-center mb-8">
+              <h1 className="text-3xl font-bold text-white font-display mb-3">
+                Speak, Adventurer!
+              </h1>
+              <p className="text-white/60 text-sm leading-relaxed">
+                &ldquo;The bard is listening — and he&apos;s already tuning his lute.&rdquo;
+              </p>
+            </div>
 
-          <h1 style={titleStyle}>Speak, Adventurer!</h1>
-          <p style={subtitleStyle}>
-            “The bard is listening — and he’s already tuning his lute.”
-          </p>
-        </header>
-
-        <form
-          action="https://formsubmit.co/gianosdm@gmail.com"
-          method="POST"
-          style={{ fontFamily: "'Lora', serif" }}
-        >
-          <input type="hidden" name="_captcha" value="false" />
-          <input
-            type="hidden"
-            name="_next"
-            value="https://npcroll.com/thanks"
-          />
-          <input
-            type="hidden"
-            name="_subject"
-            value="[NPCRoll] New feedback received"
-          />
-
-          <div style={{ marginBottom: "1.3rem" }}>
-            <label htmlFor="mind" style={labelStyle}>
-              What&apos;s on your mind? <span style={{ color: "#13292A" }}>*</span>
-            </label>
-            <textarea
-              id="mind"
-              name="whats_on_your_mind"
-              required
-              style={textareaStyle}
-              placeholder="Tell us about your experience, ideas, or anything that comes to mind..."
-            />
-          </div>
-
-          <div style={{ marginBottom: "1.3rem" }}>
-            <label htmlFor="feature" style={labelStyle}>
-              What features would you love to see next?
-            </label>
-            <textarea
-              id="feature"
-              name="feature_request"
-              style={textareaStyle}
-              placeholder="Unleash your creativity!..."
-            />
-          </div>
-
-          <div style={{ marginBottom: "1.3rem" }}>
-            <label htmlFor="email" style={labelStyle}>
-              Your email (optional)
-            </label>
-            <input
-              id="email"
-              name="email"
-              type="text"
-              inputMode="email"
-              style={inputBase}
-              placeholder="Only if you want us to reach out for beta testing..."
-              pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$"
-              title="Please enter a valid email (e.g. name@example.com)"
-            />
-          </div>
-
-          <button type="submit" style={buttonStyle} className="feedback-button">
-            SEND FEEDBACK
-          </button>
-
-          <p style={smallTextStyle}>
-            We only use this information to improve NPCRoll. No newsletters, no
-            spam.
-          </p>
-                <div
-                    style={{
-                        textAlign: "left",
-                        marginBottom: "1px",    // SPAZIO EXTRA
-                        marginTop: "36px",        // un leggero distacco dal top della card
-                    }}
+            {isSubmitted ? (
+              /* Success State */
+              <div className="text-center py-8">
+                <CheckCircle className="w-16 h-16 text-teal-400 mx-auto mb-4" />
+                <h2 className="text-xl font-bold text-white mb-2">Thank you!</h2>
+                <p className="text-white/60 text-sm mb-6">
+                  Your feedback has been sent. We appreciate your time!
+                </p>
+                <Link 
+                  href="/"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-white/10 border border-white/20 text-white hover:bg-white/20 transition-all duration-200"
                 >
-                    <a
-                        href="/"
-                        style={{
-                            display: "inline-flex",
-                            alignItems: "center",
-                            gap: "8px",
-                            color: "#2B7A78",           // palette teal
-                            textDecoration: "none",
-                            fontFamily: "'Lora', serif",
-                            fontSize: "1rem",
-                            transition: "opacity 0.2s",
-                        }}
-                        onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.8")}
-                        onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
-                    >
-                        <span style={{ fontSize: "1.25rem" }}>←</span>
-                        Back to NPCRoll
-                    </a>
+                  <ArrowLeft className="w-4 h-4" />
+                  Back to NPCRoll
+                </Link>
+              </div>
+            ) : (
+              /* Form */
+              <form onSubmit={handleSubmit} className="space-y-5">
+                <input type="hidden" name="_captcha" value="false" />
+                <input type="hidden" name="_subject" value="[NPCRoll] New feedback received" />
+
+                {/* What's on your mind */}
+                <div>
+                  <label 
+                    htmlFor="mind" 
+                    className="block text-[11px] font-semibold tracking-[0.1em] text-white/70 uppercase mb-2"
+                  >
+                    What&apos;s on your mind? <span className="text-teal-400">*</span>
+                  </label>
+                  <textarea
+                    id="mind"
+                    name="whats_on_your_mind"
+                    required
+                    rows={4}
+                    className="w-full rounded-lg bg-white/5 border border-white/10 px-4 py-3 text-sm text-white placeholder-white/40 focus:outline-none focus:border-teal-400/50 focus:ring-1 focus:ring-teal-400/30 transition-all duration-200 resize-y"
+                    placeholder="Tell us about your experience, ideas, or anything that comes to mind..."
+                  />
                 </div>
-        </form>
-      </div>
-    </main>
+
+                {/* Feature Request */}
+                <div>
+                  <label 
+                    htmlFor="feature" 
+                    className="block text-[11px] font-semibold tracking-[0.1em] text-white/70 uppercase mb-2"
+                  >
+                    What features would you love to see next?
+                  </label>
+                  <textarea
+                    id="feature"
+                    name="feature_request"
+                    rows={3}
+                    className="w-full rounded-lg bg-white/5 border border-white/10 px-4 py-3 text-sm text-white placeholder-white/40 focus:outline-none focus:border-teal-400/50 focus:ring-1 focus:ring-teal-400/30 transition-all duration-200 resize-y"
+                    placeholder="Unleash your creativity!..."
+                  />
+                </div>
+
+                {/* Email */}
+                <div>
+                  <label 
+                    htmlFor="email" 
+                    className="block text-[11px] font-semibold tracking-[0.1em] text-white/70 uppercase mb-2"
+                  >
+                    Your email <span className="text-white/40">(optional)</span>
+                  </label>
+                  <input
+                    id="email"
+                    name="email"
+                    type="email"
+                    className="w-full rounded-lg bg-white/5 border border-white/10 px-4 py-3 text-sm text-white placeholder-white/40 focus:outline-none focus:border-teal-400/50 focus:ring-1 focus:ring-teal-400/30 transition-all duration-200"
+                    placeholder="Only if you want us to reach out for beta testing..."
+                  />
+                </div>
+
+                {/* Submit Button */}
+                <div className="pt-2">
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="group relative w-full overflow-hidden rounded-lg bg-[#D4AF6A] px-6 py-4 transition-all duration-300 shadow-lg shadow-[#D4AF6A]/30 hover:shadow-[#D4AF6A]/50 hover:shadow-xl hover:scale-[1.01] disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100"
+                  >
+                    <span className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
+                    <span className="absolute bottom-0 left-0 h-48 w-full origin-bottom translate-y-full transform overflow-hidden rounded-lg bg-white/20 transition-all duration-300 ease-out group-hover:translate-y-14"></span>
+                    <div className="relative flex items-center justify-center gap-3">
+                      <Send className={`w-5 h-5 text-slate-900 transition-transform duration-300 ${isSubmitting ? 'animate-pulse' : 'group-hover:translate-x-0.5'}`} />
+                      <span className="font-display font-bold text-lg text-slate-900">
+                        {isSubmitting ? 'SENDING...' : 'SEND FEEDBACK'}
+                      </span>
+                    </div>
+                  </button>
+                </div>
+
+                {/* Privacy Note */}
+                <p className="text-white/40 text-xs text-center pt-2">
+                  We only use this information to improve NPCRoll. No newsletters, no spam.
+                </p>
+              </form>
+            )}
+          </div>
+        </div>
+      </main>
+
+      {/* Footer */}
+      <footer className="bg-white/10 backdrop-blur-md border-t border-white/20 mt-auto">
+        <div className="max-w-7xl mx-auto px-4 py-6">
+          <div className="flex flex-col md:flex-row items-center md:items-center justify-between gap-3 text-white/80 text-sm">
+            <div className="md:flex-1 md:text-left text-center">
+              NPCRoll is a curated library of NPCs with unique personality, voice and motivations. Ready to use at your table.
+            </div>
+
+            <div className="flex items-center gap-4 mt-2 md:mt-0">
+              <Link href="/" className="text-teal-300 hover:text-teal-200 transition-colors">Roll</Link>
+              <span className="text-white/40 hidden md:inline">|</span>
+              <Link href="/feedback" className="text-teal-300 hover:text-teal-200 transition-colors">Feedback</Link>
+            </div>
+
+            <div className="md:text-right text-center text-white/70 mt-2 md:mt-0">
+              © 2025 NPCRoll. <Link href="/legal" className="text-teal-300 hover:text-teal-200 transition-colors">Licence & Privacy</Link>
+            </div>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }

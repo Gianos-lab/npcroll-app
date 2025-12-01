@@ -273,7 +273,7 @@ This early build holds only one pack — but worry not, more are brewing.</span>
             {isLoading ? (
               <NpcLoadingState />
             ) : currentNpc ? (
-              <NpcDetailPanel {...currentNpc} onRollAnother={handleRollNpc} />
+              <NpcDetailPanel {...currentNpc} onRollAnother={handleRollNpc} onClear={() => setCurrentNpc(null)} />
             ) : (
               <NpcEmptyState />
             )}

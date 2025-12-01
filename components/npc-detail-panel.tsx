@@ -3,7 +3,7 @@
 import * as React from "react";
 import { motion } from "framer-motion";
 import { BorderBeam } from "@/components/ui/border-beam";
-import { Dices, Copy, Check, RotateCcw } from "lucide-react";
+import { Dices, Copy, Check, RotateCcw, X } from "lucide-react";
 
 const LOADING_MESSAGES = [
   "Consulting the ancient grimoire…",
@@ -165,6 +165,7 @@ type NpcDetailPanelProps = {
   line1: string;
   line2: string;
   onRollAnother?: () => void;
+  onClear?: () => void;
 };
 
 export function NpcDetailPanel({
@@ -183,6 +184,7 @@ export function NpcDetailPanel({
   line1,
   line2,
   onRollAnother,
+  onClear,
 }: NpcDetailPanelProps) {
   const [copied, setCopied] = React.useState(false);
 
@@ -308,6 +310,18 @@ Lines:
               >
                 <RotateCcw className="w-3.5 h-3.5" />
                 <span>Roll Another</span>
+              </button>
+            )}
+            
+            {/* Clear */}
+            {onClear && (
+              <button
+                onClick={onClear}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 text-[#DEF2F1]/50 hover:text-[#DEF2F1]/80 text-xs font-medium transition-all duration-200"
+                title="Clear NPC"
+              >
+                <X className="w-3.5 h-3.5" />
+                <span>Clear</span>
               </button>
             )}
           </div>
