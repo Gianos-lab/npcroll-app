@@ -14,6 +14,7 @@ import ExternalLinkButton from "@/components/animata/button/external-link-button
 import { InfoTooltip } from "@/components/info-tooltip";
 import { NpcDetailPanel, NpcEmptyState, NpcLoadingState } from "@/components/npc-detail-panel";
 import { motion, AnimatePresence } from "framer-motion";
+import { fetchRandomNpc } from "./actions";
 
 // NPC type for the fetched data
 type Npc = {
@@ -37,19 +38,17 @@ type Npc = {
 async function fetchNpc(filters?: { race?: string; morality?: string; profession?: string }): Promise<Npc> {
   const start = Date.now();
   
-  const params = new URLSearchParams();
-  if (filters?.race && filters.race !== 'all-races') params.set('race', filters.race);
-  if (filters?.morality && filters.morality !== 'all-moralities') params.set('morality', filters.morality);
-  if (filters?.profession && filters.profession !== 'all-professions') params.set('profession', filters.profession);
+  const npcFilters = {
+    race: filters?.race && filters.race !== 'all-races' ? filters.race : null,
+    morality: filters?.morality && filters.morality !== 'all-moralities' ? filters.morality : null,
+    profession: filters?.profession && filters.profession !== 'all-professions' ? filters.profession : null,
+  };
   
-  const url = `/api/npc${params.toString() ? `?${params.toString()}` : ''}`;
-  const res = await fetch(url);
+  const npc = await fetchRandomNpc(npcFilters);
   
-  if (!res.ok) {
+  if (!npc) {
     throw new Error('Failed to fetch NPC');
   }
-  
-  const npc = (await res.json()) as Npc;
 
   // Ensure minimum delay for better UX
   const MIN_DELAY_MS = 2500;
@@ -60,7 +59,7 @@ async function fetchNpc(filters?: { race?: string; morality?: string; profession
     );
   }
 
-  return npc;
+  return npc as Npc;
 }
 
 export default function Home() {
