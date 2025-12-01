@@ -8,7 +8,7 @@ export async function GET(request: Request) {
   const morality = searchParams.get("morality");
   const profession = searchParams.get("profession");
 
-  const npc = getRandomNpc({ race, morality, profession });
+  const npc = await getRandomNpc({ race, morality, profession });
 
   if (!npc) {
     return NextResponse.json(

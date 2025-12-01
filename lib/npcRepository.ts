@@ -1,4 +1,5 @@
-import npcData from "@/data/pack01/pack01_fv.json";
+// NPC Data URL from Vercel Blob Storage
+const NPC_DATA_URL = "https://3vo03d27strgbkim.public.blob.vercel-storage.com/pack01_fv.json";
 
 type RawNpc = {
   id: string;
@@ -41,24 +42,35 @@ export type Npc = {
 };
 
 // Transform raw data to match expected format
-const rawNpcs = npcData as RawNpc[];
-const npcs: Npc[] = rawNpcs.map((raw) => ({
-  id: raw.id,
-  name: `${raw.name}${raw.surname ? ` ${raw.surname}` : ''}`,
-  race: raw.race,
-  profession: raw.profession,
-  morality: raw.morality as "Good" | "Neutral" | "Evil",
-  description: raw.description,
-  tagline: raw.tagline,
-  look: raw.look,
-  personality: raw.personality,
-  history: raw.history,
-  voice: raw.voice,
-  motivation: raw.motivation,
-  rumor: raw.rumor,
-  line1: raw.line_1,
-  line2: raw.line_2,
-}));
+let npcs: Npc[] = [];
+let dataLoaded = false;
+
+async function loadNpcData(): Promise<void> {
+  if (dataLoaded) return;
+  
+  const response = await fetch(NPC_DATA_URL, { next: { revalidate: 3600 } });
+  const rawNpcs = await response.json() as RawNpc[];
+  
+  npcs = rawNpcs.map((raw) => ({
+    id: raw.id,
+    name: `${raw.name}${raw.surname ? ` ${raw.surname}` : ''}`,
+    race: raw.race,
+    profession: raw.profession,
+    morality: raw.morality as "Good" | "Neutral" | "Evil",
+    description: raw.description,
+    tagline: raw.tagline,
+    look: raw.look,
+    personality: raw.personality,
+    history: raw.history,
+    voice: raw.voice,
+    motivation: raw.motivation,
+    rumor: raw.rumor,
+    line1: raw.line_1,
+    line2: raw.line_2,
+  }));
+  
+  dataLoaded = true;
+}
 
 export type NpcFilters = {
   race?: string | null;
@@ -71,7 +83,8 @@ function matchesFilter(value: string, filter?: string | null) {
   return value.toLowerCase() === filter.toLowerCase();
 }
 
-export function getFilteredNpcs(filters: NpcFilters): Npc[] {
+export async function getFilteredNpcs(filters: NpcFilters): Promise<Npc[]> {
+  await loadNpcData();
   return npcs.filter((npc) => {
     if (!matchesFilter(npc.race, filters.race)) return false;
     if (!matchesFilter(npc.morality, filters.morality)) return false;
@@ -80,8 +93,9 @@ export function getFilteredNpcs(filters: NpcFilters): Npc[] {
   });
 }
 
-export function getRandomNpc(filters: NpcFilters): Npc | null {
-  const pool = getFilteredNpcs(filters);
+export async function getRandomNpc(filters: NpcFilters): Promise<Npc | null> {
+  await loadNpcData();
+  const pool = await getFilteredNpcs(filters);
   if (pool.length === 0) {
     return null;
   }
@@ -92,7 +106,8 @@ export function getRandomNpc(filters: NpcFilters): Npc | null {
 /**
  * Metadati per popolare i dropdown in base al contenuto reale del JSON
  */
-export function getAllRaces(): string[] {
+export async function getAllRaces(): Promise<string[]> {
+  await loadNpcData();
   const races = new Set<string>();
   for (const npc of npcs) {
     races.add(npc.race);
@@ -100,7 +115,8 @@ export function getAllRaces(): string[] {
   return Array.from(races).sort();
 }
 
-export function getAllMoralities(): string[] {
+export async function getAllMoralities(): Promise<string[]> {
+  await loadNpcData();
   const moralities = new Set<string>();
   for (const npc of npcs) {
     moralities.add(npc.morality);
@@ -108,7 +124,8 @@ export function getAllMoralities(): string[] {
   return Array.from(moralities).sort();
 }
 
-export function getAllProfessions(): string[] {
+export async function getAllProfessions(): Promise<string[]> {
+  await loadNpcData();
   const professions = new Set<string>();
   for (const npc of npcs) {
     professions.add(npc.profession);
