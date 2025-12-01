@@ -5,10 +5,22 @@
 html {
 	overflow-y: scroll;
 	scrollbar-gutter: stable;
+	min-height: 100%;
 }
 
 body, .font-body {
 	font-family: 'Lora', serif;
+}
+
+body {
+	min-height: 100%;
+	background-color: #02080b;
+	color: #FEFFFF;
+}
+
+img {
+	max-width: 100%;
+	height: auto;
 }
 
 /* Prevent Radix from hiding overflow on body */

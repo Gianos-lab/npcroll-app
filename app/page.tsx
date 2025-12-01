@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Separator } from "@/components/ui/separator";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
@@ -9,10 +9,11 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { ChevronDown, Users, Scale, Briefcase, Info } from "lucide-react";
+import { ChevronDown, Users, Scale, Briefcase, Info, Sparkles } from "lucide-react";
 import ExternalLinkButton from "@/components/animata/button/external-link-button";
 import { InfoTooltip } from "@/components/info-tooltip";
 import { NpcDetailPanel, NpcEmptyState, NpcLoadingState } from "@/components/npc-detail-panel";
+import { motion, AnimatePresence } from "framer-motion";
 
 // NPC type for the fetched data
 type Npc = {
@@ -71,6 +72,18 @@ export default function Home() {
   
   const [currentNpc, setCurrentNpc] = useState<Npc | null>(null);
   
+  // Mobile toast state
+  const [showMobileToast, setShowMobileToast] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  
+  // Check if mobile on mount
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+  
   // Filter states
   const [selectedRace, setSelectedRace] = useState("all-races");
   const [selectedMorality, setSelectedMorality] = useState("all-moralities");
@@ -86,6 +99,12 @@ export default function Home() {
         profession: selectedProfession,
       });
       setCurrentNpc(npc);
+      
+      // Show toast on mobile
+      if (isMobile) {
+        setShowMobileToast(true);
+        setTimeout(() => setShowMobileToast(false), 3000);
+      }
     } catch (error) {
       console.error('Failed to fetch NPC:', error);
     } finally {
@@ -94,7 +113,15 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col" style={{ backgroundImage: 'url(/texture.jpg)', backgroundSize: 'cover', backgroundPosition: 'center', backgroundAttachment: 'fixed' }}>
+    <div
+      className="flex min-h-screen flex-col"
+      style={{
+        backgroundImage: 'url(/texture.jpg)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundAttachment: 'fixed',
+      }}
+    >
       {/* Header - Solo Logo */}
       <header className="bg-white/10 backdrop-blur-md border-b border-white/20 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 py-2 flex items-center justify-between" style={{ minHeight: '56px' }}>
@@ -108,15 +135,23 @@ export default function Home() {
       </header>
 
       {/* Main Content */}
-      <main className="flex-1 flex items-center py-8 overflow-hidden">
-        <div className={`w-full max-w-7xl mx-auto flex gap-10 px-8 ${!currentNpc && !isLoading ? 'items-stretch' : 'items-start'}`}>
+      <main className={`flex-1 py-8 ${!currentNpc && !isLoading ? 'flex items-center' : ''}`}>
+        <div
+          className={`mx-auto flex w-full max-w-7xl flex-col gap-6 px-4 sm:px-6 md:flex-row md:gap-10 ${
+            !currentNpc && !isLoading ? 'md:items-stretch' : 'items-start'
+          }`}
+        >
           {/* LEFT COLUMN - fixed width */}
-          <aside className={`w-[480px] flex-shrink-0 ${!currentNpc && !isLoading ? 'flex' : ''}`}>
+          <aside
+            className={`w-full flex-shrink-0 ${
+              !currentNpc && !isLoading ? 'flex' : ''
+            } md:w-[360px] lg:w-[420px]`}
+          >
             {/* Try it yourself Card */}
-            <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-xl p-6 space-y-5 w-full">
+            <div className="w-full space-y-5 rounded-xl border border-white/20 bg-white/10 p-5 sm:p-6 backdrop-blur-md">
               {/* Hero Text */}
               <div className="text-center">
-                <h1 className="text-3xl font-bold text-white font-display">Need an NPC? Roll one</h1>
+                <h1 className="font-display text-2xl font-bold text-white sm:text-3xl">Need an NPC? Roll one</h1>
               </div>
 
               <div className="flex items-center gap-2 mb-2">
@@ -132,15 +167,15 @@ This early build holds only one pack — but worry not, more are brewing.</span>
               </div>
 
               {/* Chosen Pack Card */}
-              <div className="flex items-center gap-4 rounded-xl bg-white/5 backdrop-blur-sm px-4 py-3 shadow-sm border border-white/10 w-full">
+              <div className="flex items-center gap-4 rounded-xl border border-white/10 bg-white/5 px-4 py-3 shadow-sm backdrop-blur-sm">
                 <div className="flex-shrink-0">
                   <img
                     src="/packs/starting-village.jpeg"
                     alt="Starting Village"
-                    className="w-16 h-16 rounded-lg object-cover border border-white/20 shadow"
+                    className="h-16 w-16 rounded-lg border border-white/20 object-cover shadow"
                   />
                 </div>
-                <div className="flex flex-col justify-center min-w-0 flex-1">
+                <div className="flex min-w-0 flex-1 flex-col justify-center">
                   <span className="font-bold text-base text-white leading-tight">
                     Starting Village
                   </span>
@@ -174,14 +209,14 @@ This early build holds only one pack — but worry not, more are brewing.</span>
 
                 {/* Race Filter */}
                 <Collapsible open={isRaceOpen} onOpenChange={setIsRaceOpen}>
-                  <CollapsibleTrigger className="flex items-center justify-between w-full p-3 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all duration-200">
+                  <CollapsibleTrigger className="flex w-full items-center justify-between rounded-lg border border-white/10 bg-white/5 p-3 transition-all duration-200 hover:border-white/20 hover:bg-white/10">
                     <div className="flex items-center gap-2">
                       <Users className="w-4 h-4 text-white/70" />
                       <span className="text-sm font-medium text-white/90">Race</span>
                     </div>
                     <ChevronDown className={`h-4 w-4 text-white/60 transition-transform duration-200 ${isRaceOpen ? 'rotate-180' : ''}`} />
                   </CollapsibleTrigger>
-                  <CollapsibleContent className="pt-3 px-2">
+                  <CollapsibleContent className="px-1 pt-3 sm:px-2">
                     <RadioGroup value={selectedRace} onValueChange={setSelectedRace} className="space-y-2">
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem value="all-races" id="race-all" className="border-white/40 text-teal-400" />
@@ -201,14 +236,14 @@ This early build holds only one pack — but worry not, more are brewing.</span>
 
                 {/* Morality Filter */}
                 <Collapsible open={isMoralityOpen} onOpenChange={setIsMoralityOpen}>
-                  <CollapsibleTrigger className="flex items-center justify-between w-full p-3 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all duration-200">
+                  <CollapsibleTrigger className="flex w-full items-center justify-between rounded-lg border border-white/10 bg-white/5 p-3 transition-all duration-200 hover:border-white/20 hover:bg-white/10">
                     <div className="flex items-center gap-2">
                       <Scale className="w-4 h-4 text-white/70" />
                       <span className="text-sm font-medium text-white/90">Morality</span>
                     </div>
                     <ChevronDown className={`h-4 w-4 text-white/60 transition-transform duration-200 ${isMoralityOpen ? 'rotate-180' : ''}`} />
                   </CollapsibleTrigger>
-                  <CollapsibleContent className="pt-3 px-2">
+                  <CollapsibleContent className="px-1 pt-3 sm:px-2">
                     <RadioGroup value={selectedMorality} onValueChange={setSelectedMorality} className="space-y-2">
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem value="all-moralities" id="morality-all" className="border-white/40 text-teal-400" />
@@ -232,14 +267,14 @@ This early build holds only one pack — but worry not, more are brewing.</span>
 
                 {/* Profession Filter */}
                 <Collapsible open={isProfessionOpen} onOpenChange={setIsProfessionOpen}>
-                  <CollapsibleTrigger className="flex items-center justify-between w-full p-3 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all duration-200">
+                  <CollapsibleTrigger className="flex w-full items-center justify-between rounded-lg border border-white/10 bg-white/5 p-3 transition-all duration-200 hover:border-white/20 hover:bg-white/10">
                     <div className="flex items-center gap-2">
                       <Briefcase className="w-4 h-4 text-white/70" />
                       <span className="text-sm font-medium text-white/90">Profession</span>
                     </div>
                     <ChevronDown className={`h-4 w-4 text-white/60 transition-transform duration-200 ${isProfessionOpen ? 'rotate-180' : ''}`} />
                   </CollapsibleTrigger>
-                  <CollapsibleContent className="pt-3 px-2">
+                  <CollapsibleContent className="px-1 pt-3 sm:px-2">
                     <RadioGroup value={selectedProfession} onValueChange={setSelectedProfession} className="space-y-2">
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem value="all-professions" id="prof-all" className="border-white/40 text-teal-400" />
@@ -269,7 +304,7 @@ This early build holds only one pack — but worry not, more are brewing.</span>
           </aside>
 
           {/* RIGHT COLUMN - fills remaining space */}
-          <div className={`flex-1 min-w-0 ${!currentNpc && !isLoading ? 'flex' : ''}`}>
+          <div className="w-full flex-1 min-w-0">
             {isLoading ? (
               <NpcLoadingState />
             ) : currentNpc ? (
@@ -301,6 +336,24 @@ This early build holds only one pack — but worry not, more are brewing.</span>
           </div>
         </div>
       </footer>
+
+      {/* Mobile Toast - NPC Created */}
+      <AnimatePresence>
+        {showMobileToast && (
+          <motion.div
+            initial={{ opacity: 0, y: 50, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 20, scale: 0.95 }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
+            className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[200] md:hidden"
+          >
+            <div className="flex items-center gap-2 bg-teal-600/95 backdrop-blur-sm text-white px-5 py-3 rounded-full shadow-lg border border-teal-400/30">
+              <Sparkles className="w-4 h-4 text-teal-200" />
+              <span className="font-medium text-sm">NPC Created! Scroll down</span>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

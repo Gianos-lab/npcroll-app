@@ -41,7 +41,7 @@ export function NpcLoadingState() {
   return (
     <section className="w-full">
       {/* Main panel - same glass style as full state */}
-      <div className="rounded-xl bg-[#17252A]/95 backdrop-blur-md border border-white/10 shadow-[0_8_60px_rgba(0,0,0,0.6)] px-7 py-7 flex flex-col gap-6">
+      <div className="flex min-h-[420px] flex-col gap-5 rounded-xl border border-white/10 bg-[#17252A]/95 px-4 py-5 text-left shadow-[0_8_60px_rgba(0,0,0,0.6)] backdrop-blur-md sm:min-h-[480px] sm:px-6 sm:py-6 md:gap-6 md:px-7 md:py-7">
         
         {/* Loading message at top */}
         <div className="flex items-center gap-3 mb-2">
@@ -60,7 +60,7 @@ export function NpcLoadingState() {
         {/* 2) OVERVIEW skeleton */}
         <section>
           <SkeletonBar className="h-3 w-20 mb-3" />
-          <div className="rounded-lg bg-white/5 border border-white/10 p-4 space-y-2">
+          <div className="space-y-2 rounded-lg border border-white/10 bg-white/5 p-4">
             <SkeletonBar className="h-4 w-full" />
             <SkeletonBar className="h-4 w-5/6" />
             <SkeletonBar className="h-4 w-4/6" />
@@ -70,8 +70,8 @@ export function NpcLoadingState() {
         {/* 3) WHAT DEFINES THEM skeleton */}
         <section>
           <SkeletonBar className="h-3 w-32 mb-3" />
-          <div className="rounded-lg bg-white/5 border border-white/10 p-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="rounded-lg border border-white/10 bg-white/5 p-4">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               {['Look', 'Personality', 'History', 'Voice'].map((label) => (
                 <div key={label}>
                   <SkeletonBar className="h-2.5 w-16 mb-2" />
@@ -86,7 +86,7 @@ export function NpcLoadingState() {
         {/* 4) AT THE TABLE skeleton */}
         <section className="mt-auto">
           <SkeletonBar className="h-3 w-24 mb-3" />
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
             {[1, 2, 3].map((i) => (
               <div key={i} className="rounded-lg bg-white/5 border border-white/10 p-4">
                 <SkeletonBar className="h-2.5 w-14 mb-3" />
@@ -107,9 +107,9 @@ export function NpcLoadingState() {
  */
 export function NpcEmptyState() {
   return (
-    <section className="w-full h-full">
+    <section className="h-full w-full">
       {/* Main panel - same glass style as full state */}
-      <div className="h-full rounded-xl bg-[#17252A]/95 backdrop-blur-md border border-white/10 shadow-[0_8_60px_rgba(0,0,0,0.6)] px-7 py-7 flex flex-col items-center justify-center relative overflow-hidden">
+      <div className="relative flex h-full flex-col items-center justify-center overflow-hidden rounded-xl border border-white/10 bg-[#17252A]/95 px-5 py-8 text-center shadow-[0_8_60px_rgba(0,0,0,0.6)] backdrop-blur-md sm:px-7">
         
         {/* Subtle background pattern */}
         <div className="absolute inset-0 opacity-[0.03]" style={{
@@ -117,7 +117,7 @@ export function NpcEmptyState() {
         }} />
         
         {/* Centered minimal content */}
-        <div className="relative flex flex-col items-center text-center gap-4">
+        <div className="relative flex flex-col items-center gap-4 text-center">
           {/* Large animated dice icon with glow */}
           <div className="relative">
             <div className="absolute inset-0 bg-[#3AAFA9]/20 blur-2xl rounded-full scale-150" />
@@ -133,12 +133,12 @@ export function NpcEmptyState() {
           </p>
           
           {/* Subtitle */}
-          <p className="text-sm text-[#DEF2F1]/50 max-w-[320px] leading-relaxed">
+          <p className="max-w-[320px] text-sm leading-relaxed text-[#DEF2F1]/50">
             Click the  Roll NPC button on the left to summon a new character.
           </p>
           
           {/* Decorative hint */}
-          <div className="flex items-center gap-2 mt-2 text-xs text-[#3AAFA9]/60">
+          <div className="mt-2 flex items-center gap-2 text-xs text-[#3AAFA9]/60">
             <span className="w-8 h-px bg-gradient-to-r from-transparent to-[#3AAFA9]/40" />
             <span>use the filters to narrow your search</span>
             <span className="w-8 h-px bg-gradient-to-l from-transparent to-[#3AAFA9]/40" />
@@ -220,11 +220,43 @@ Lines:
 `.trim();
 
     try {
-      await navigator.clipboard.writeText(formattedText);
+      // Try modern Clipboard API first
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(formattedText);
+      } else {
+        // Fallback for older browsers / insecure contexts
+        const textArea = document.createElement('textarea');
+        textArea.value = formattedText;
+        textArea.style.position = 'fixed';
+        textArea.style.left = '-999999px';
+        textArea.style.top = '-999999px';
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        document.execCommand('copy');
+        textArea.remove();
+      }
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
       console.error('Failed to copy:', err);
+      // Try fallback even if modern API fails
+      try {
+        const textArea = document.createElement('textarea');
+        textArea.value = formattedText;
+        textArea.style.position = 'fixed';
+        textArea.style.left = '-999999px';
+        textArea.style.top = '-999999px';
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        document.execCommand('copy');
+        textArea.remove();
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      } catch (fallbackErr) {
+        console.error('Fallback copy also failed:', fallbackErr);
+      }
     }
   };
 
@@ -267,12 +299,12 @@ Lines:
         />
         
         {/* Main panel - inverted glass style: darker, more prominent - z-10 to sit above beam */}
-        <div className="relative z-10 rounded-xl bg-[#17252A] backdrop-blur-md border border-white/10 shadow-[0_8_60px_rgba(0,0,0,0.6)] px-7 py-7 flex flex-col gap-6">
+        <div className="relative z-10 flex flex-col gap-5 rounded-xl border border-white/10 bg-[#17252A] px-5 py-6 shadow-[0_8_60px_rgba(0,0,0,0.6)] backdrop-blur-md sm:px-6 sm:py-7 md:gap-6 md:px-7">
         
         {/* 1) HEADER */}
-        <motion.header variants={childVariants} className="flex items-start justify-between gap-4">
+        <motion.header variants={childVariants} className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
           <div>
-            <h2 className="text-3xl font-bold text-[#FEFFFF] font-display mb-1">
+            <h2 className="mb-1 font-display text-2xl font-bold text-[#FEFFFF] sm:text-[28px] md:text-3xl">
               {name}
             </h2>
             <p className="text-sm text-[#DEF2F1]/70">
@@ -281,11 +313,11 @@ Lines:
           </div>
           
           {/* Action buttons */}
-          <div className="flex items-center gap-2 flex-shrink-0">
+          <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center">
             {/* Copy to Clipboard */}
             <button
               onClick={copyToClipboard}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 border border-white/10 hover:border-white/20 text-[#DEF2F1]/80 hover:text-[#FEFFFF] text-xs font-medium transition-all duration-200"
+              className="flex min-h-[40px] w-full items-center justify-center gap-1.5 rounded-lg border border-white/10 bg-white/10 px-3 py-2 text-xs font-medium text-[#DEF2F1]/80 transition-all duration-200 hover:border-white/20 hover:bg-white/20 hover:text-[#FEFFFF] touch-manipulation sm:w-auto"
               title="Copy NPC to clipboard"
             >
               {copied ? (
@@ -305,7 +337,7 @@ Lines:
             {onRollAnother && (
               <button
                 onClick={onRollAnother}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#3AAFA9]/20 hover:bg-[#3AAFA9]/30 border border-[#3AAFA9]/30 hover:border-[#3AAFA9]/50 text-[#3AAFA9] hover:text-[#FEFFFF] text-xs font-medium transition-all duration-200"
+                className="flex min-h-[40px] w-full items-center justify-center gap-1.5 rounded-lg border border-[#3AAFA9]/30 bg-[#3AAFA9]/20 px-3 py-2 text-xs font-medium text-[#3AAFA9] transition-all duration-200 hover:border-[#3AAFA9]/50 hover:bg-[#3AAFA9]/30 hover:text-[#FEFFFF] touch-manipulation sm:w-auto"
                 title="Roll another NPC"
               >
                 <RotateCcw className="w-3.5 h-3.5" />
@@ -317,7 +349,7 @@ Lines:
             {onClear && (
               <button
                 onClick={onClear}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 text-[#DEF2F1]/50 hover:text-[#DEF2F1]/80 text-xs font-medium transition-all duration-200"
+                className="flex min-h-[40px] w-full items-center justify-center gap-1.5 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-xs font-medium text-[#DEF2F1]/50 transition-all duration-200 hover:border-white/20 hover:bg-white/10 hover:text-[#DEF2F1]/80 touch-manipulation sm:w-auto"
                 title="Clear NPC"
               >
                 <X className="w-3.5 h-3.5" />
@@ -332,7 +364,7 @@ Lines:
           <h3 className="text-[11px] font-semibold tracking-[0.14em] text-[#DEF2F1]/50 uppercase mb-3">
             Overview
           </h3>
-          <div className="relative rounded-lg bg-white/5 border border-white/10 p-4">
+          <div className="relative rounded-lg border border-white/10 bg-white/5 p-4 sm:p-5">
             {/* Top gradient accent - using Teal */}
             <div className="absolute top-0 left-0 right-0 h-[2px] rounded-t-lg bg-gradient-to-r from-[#3AAFA9]/60 via-[#DEF2F1]/20 to-transparent" />
             <p className="text-sm text-[#FEFFFF]/90 leading-relaxed">
@@ -351,8 +383,8 @@ Lines:
           <h3 className="text-[11px] font-semibold tracking-[0.14em] text-[#DEF2F1]/50 uppercase mb-3">
             What defines them
           </h3>
-          <div className="rounded-lg bg-white/5 border border-white/10 p-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="rounded-lg border border-white/10 bg-white/5 p-3 sm:p-4">
+            <div className="grid grid-cols-1 gap-3 md:grid-cols-2 md:gap-4">
               <div>
                 <p className="text-[10px] font-semibold tracking-[0.14em] text-[#DEF2F1]/50 uppercase mb-1">
                   Look
@@ -386,9 +418,9 @@ Lines:
           <h3 className="text-[11px] font-semibold tracking-[0.14em] text-[#DEF2F1]/50 uppercase mb-3">
             At the table
           </h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
             {/* Card 1: MOTIVATION */}
-            <div className="relative rounded-lg bg-white/5 border border-white/10 p-4">
+            <div className="relative rounded-lg border border-white/10 bg-white/5 p-4">
               <div className="absolute left-0 top-0 bottom-0 w-[3px] rounded-l-lg bg-[#3AAFA9]/70" />
               <p className="text-[10px] font-semibold tracking-[0.14em] text-[#3AAFA9] uppercase mb-2 pl-2">
                 Motivation
@@ -399,7 +431,7 @@ Lines:
             </div>
 
             {/* Card 2: RUMOR */}
-            <div className="relative rounded-lg bg-white/5 border border-white/10 p-4">
+            <div className="relative rounded-lg border border-white/10 bg-white/5 p-4">
               <div className="absolute left-0 top-0 bottom-0 w-[3px] rounded-l-lg bg-[#2B7A78]/70" />
               <p className="text-[10px] font-semibold tracking-[0.14em] text-[#2B7A78] uppercase mb-2 pl-2">
                 Rumor
@@ -410,7 +442,7 @@ Lines:
             </div>
 
             {/* Card 3: LINES AT THE TABLE */}
-            <div className="relative rounded-lg bg-white/5 border border-white/10 p-4">
+            <div className="relative rounded-lg border border-white/10 bg-white/5 p-4">
               <div className="absolute left-0 top-0 bottom-0 w-[3px] rounded-l-lg bg-[#DEF2F1]/40" />
               <p className="text-[10px] font-semibold tracking-[0.14em] text-[#DEF2F1]/70 uppercase mb-2 pl-2">
                 Lines

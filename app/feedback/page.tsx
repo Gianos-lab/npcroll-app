@@ -57,13 +57,13 @@ export default function FeedbackPage() {
       </header>
 
       {/* Main Content */}
-      <main className="flex-1 flex items-center justify-center py-12 px-4">
+      <main className="flex-1 flex items-center justify-center py-10 px-4 sm:py-12">
         <div className="w-full max-w-[600px]">
           {/* Dark Glass Card */}
-          <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-xl p-8">
+          <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-xl p-6 sm:p-8">
             {/* Header */}
             <div className="text-center mb-8">
-              <h1 className="text-3xl font-bold text-white font-display mb-3">
+              <h1 className="text-2xl sm:text-3xl font-bold text-white font-display mb-3">
                 Speak, Adventurer!
               </h1>
               <p className="text-white/60 text-sm leading-relaxed">
@@ -106,7 +106,7 @@ export default function FeedbackPage() {
                     name="whats_on_your_mind"
                     required
                     rows={4}
-                    className="w-full rounded-lg bg-white/5 border border-white/10 px-4 py-3 text-sm text-white placeholder-white/40 focus:outline-none focus:border-teal-400/50 focus:ring-1 focus:ring-teal-400/30 transition-all duration-200 resize-y"
+                    className="w-full rounded-lg bg-white/5 border border-white/10 px-4 py-3 text-base sm:text-sm text-white placeholder-white/40 focus:outline-none focus:border-teal-400/50 focus:ring-1 focus:ring-teal-400/30 transition-all duration-200 resize-y"
                     placeholder="Tell us about your experience, ideas, or anything that comes to mind..."
                   />
                 </div>
@@ -123,7 +123,7 @@ export default function FeedbackPage() {
                     id="feature"
                     name="feature_request"
                     rows={3}
-                    className="w-full rounded-lg bg-white/5 border border-white/10 px-4 py-3 text-sm text-white placeholder-white/40 focus:outline-none focus:border-teal-400/50 focus:ring-1 focus:ring-teal-400/30 transition-all duration-200 resize-y"
+                    className="w-full rounded-lg bg-white/5 border border-white/10 px-4 py-3 text-base sm:text-sm text-white placeholder-white/40 focus:outline-none focus:border-teal-400/50 focus:ring-1 focus:ring-teal-400/30 transition-all duration-200 resize-y"
                     placeholder="Unleash your creativity!..."
                   />
                 </div>
@@ -140,7 +140,7 @@ export default function FeedbackPage() {
                     id="email"
                     name="email"
                     type="email"
-                    className="w-full rounded-lg bg-white/5 border border-white/10 px-4 py-3 text-sm text-white placeholder-white/40 focus:outline-none focus:border-teal-400/50 focus:ring-1 focus:ring-teal-400/30 transition-all duration-200"
+                    className="w-full rounded-lg bg-white/5 border border-white/10 px-4 py-3 text-base sm:text-sm text-white placeholder-white/40 focus:outline-none focus:border-teal-400/50 focus:ring-1 focus:ring-teal-400/30 transition-all duration-200"
                     placeholder="Only if you want us to reach out for beta testing..."
                   />
                 </div>

@@ -31,14 +31,14 @@ export default function LegalPage() {
       </header>
 
       {/* Main Content */}
-      <main className="flex-1 py-12 px-4">
+      <main className="flex-1 py-10 px-4 sm:py-12">
         <div className="max-w-3xl mx-auto">
           {/* Dark Glass Card */}
-          <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-xl px-8 py-10">
+          <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-xl px-5 py-8 sm:px-8 sm:py-10">
             
             {/* Page Title */}
             <div className="text-center mb-10">
-              <h1 className="text-3xl font-bold text-white font-display mb-3">
+              <h1 className="text-2xl sm:text-3xl font-bold text-white font-display mb-3">
                 Legal & Privacy
               </h1>
               <p className="text-white/50 text-sm">
