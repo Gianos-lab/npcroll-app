@@ -61,34 +61,47 @@ export function NpcLoadingState() {
 
 /**
  * Empty state component for when no NPC has been rolled yet.
- * Matches the visual style of the full NPC panel.
+ * Minimal, centered design with just title and subtitle.
  */
 export function NpcEmptyState() {
   return (
-    <section className="flex-1 min-w-0 self-start">
-      {/* Container matches the full panel style */}
-      <div className="h-[220px] rounded-xl bg-[#17252A]/95 backdrop-blur-md border border-white/10 shadow-[0_8_60px_rgba(0,0,0,0.6)] px-7 py-7 flex flex-col items-center justify-center">
+    <section className="flex-1 min-w-0 flex">
+      {/* Main panel - same glass style as full state */}
+      <div className="flex-1 rounded-xl bg-[#17252A]/95 backdrop-blur-md border border-white/10 shadow-[0_8_60px_rgba(0,0,0,0.6)] px-7 py-7 flex flex-col items-center justify-center relative overflow-hidden">
         
-        {/* Centered content */}
-        <div className="flex flex-col items-center text-center gap-4">
+        {/* Subtle background pattern */}
+        <div className="absolute inset-0 opacity-[0.03]" style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+        }} />
+        
+        {/* Centered minimal content */}
+        <div className="relative flex flex-col items-center text-center gap-4">
+          {/* Animated d20 icon with glow */}
+          <div className="relative">
+            <div className="absolute inset-0 bg-[#3AAFA9]/20 blur-xl rounded-full scale-150" />
+            <img 
+              src="/roll_white.svg" 
+              alt="" 
+              className="relative w-12 h-12 opacity-60 drop-shadow-[0_0_8px_rgba(58,175,169,0.3)]"
+            />
+          </div>
           
-          {/* Dice icon */}
-          <img 
-            src="/roll_white.svg" 
-            alt="Roll" 
-            className="w-12 h-12 opacity-80 drop-shadow-[0_0_12px_rgba(58,175,169,0.5)]"
-          />
-          
-          {/* Main text */}
-          <p className="text-sm text-[#FEFFFF]">
-            No NPC has been summoned yet.
+          {/* Title */}
+          <p className="text-base text-[#FEFFFF] font-medium">
+            Your next NPC awaits
           </p>
           
-          {/* Secondary text */}
-          <p className="text-xs text-[#DEF2F1]/50 max-w-[280px]">
-            Use the panel on the left to pick your filters and roll a new character.
+          {/* Subtitle */}
+          <p className="text-sm text-[#DEF2F1]/50 max-w-[320px] leading-relaxed">
+            Roll the dice to summon a unique character with personality, voice, and story hooks ready for your table.
           </p>
           
+          {/* Decorative hint */}
+          <div className="flex items-center gap-2 mt-2 text-xs text-[#3AAFA9]/60">
+            <span className="w-8 h-px bg-gradient-to-r from-transparent to-[#3AAFA9]/40" />
+            <span>use the filters to narrow your search</span>
+            <span className="w-8 h-px bg-gradient-to-l from-transparent to-[#3AAFA9]/40" />
+          </div>
         </div>
       </div>
     </section>

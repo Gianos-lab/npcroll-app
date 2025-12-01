@@ -11,7 +11,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Users, Scale, Briefcase } from "lucide-react";
 import ExternalLinkButton from "@/components/animata/button/external-link-button";
 import {
   Select,
@@ -117,12 +117,12 @@ export default function Home() {
       </header>
 
       {/* Main Content */}
-      <main className="flex-1 flex items-start py-8 overflow-hidden">
-        <div className="w-full max-w-7xl mx-auto flex gap-10 px-8 h-full">
+      <main className="flex-1 flex items-center py-8 overflow-hidden">
+        <div className="w-full max-w-7xl mx-auto flex gap-10 px-8 items-stretch">
           {/* LEFT COLUMN */}
-          <aside className="w-[460px] max-w-full flex-shrink-0 space-y-6 self-start">
+          <aside className="w-[480px] max-w-full flex-shrink-0">
             {/* Try it yourself Card */}
-            <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-xl p-7 space-y-6 w-full">
+            <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-xl p-6 space-y-5 w-full">
               {/* Hero Text */}
               <div className="text-center">
                 <h1 className="text-3xl font-bold text-white font-display">Need an NPC? Roll one.</h1>
@@ -132,7 +132,8 @@ export default function Home() {
                 <h2 className="text-sm font-semibold text-white/80">Current Pack</h2>
                 <InfoTooltip
                   content={
-                    <span className="text-sm">Packs are themed slices of the world; each one contains its own races, roles and personalities. This preview includes only one pack, but more are in the works.</span>
+                    <span className="text-sm">NPCs are curated in Packs. Each Pack blends its own mix of races, professions, and personalities.
+This early build holds only one pack — but worry not, more are brewing..</span>
                   }
                 >
                   <Info className="w-4 h-4" />
@@ -165,11 +166,12 @@ export default function Home() {
                 <button 
                   onClick={handleRollNpc}
                   disabled={isLoading}
-                  className="group relative overflow-hidden rounded-lg bg-[#D4AF6A] px-6 py-3 transition-all shadow-lg shadow-[#D4AF6A]/30 disabled:opacity-60 disabled:cursor-not-allowed"
+                  className="group relative overflow-hidden rounded-lg bg-[#D4AF6A] px-8 py-3.5 transition-all duration-300 shadow-lg shadow-[#D4AF6A]/40 hover:shadow-[#D4AF6A]/60 hover:shadow-xl hover:scale-[1.02] disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100"
                 >
-                  <span className="absolute bottom-0 left-0 h-48 w-full origin-bottom translate-y-full transform overflow-hidden rounded-lg bg-white/15 transition-all duration-300 ease-out group-hover:translate-y-14"></span>
+                  <span className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
+                  <span className="absolute bottom-0 left-0 h-48 w-full origin-bottom translate-y-full transform overflow-hidden rounded-lg bg-white/20 transition-all duration-300 ease-out group-hover:translate-y-14"></span>
                   <div className="relative flex items-center justify-center gap-2">
-                    <img src="/roll.svg" alt="dice" className={`w-6 h-6 ${isLoading ? 'animate-spin' : ''}`} style={isLoading ? { animationDuration: '1s' } : undefined} />
+                    <img src="/roll.svg" alt="dice" className={`w-6 h-6 transition-transform duration-300 ${isLoading ? 'animate-spin' : 'group-hover:rotate-12'}`} style={isLoading ? { animationDuration: '1s' } : undefined} />
                     <span className="font-display font-bold text-sm text-slate-900">{isLoading ? 'ROLLING...' : 'ROLL NPC'}</span>
                   </div>
                 </button>
@@ -181,9 +183,12 @@ export default function Home() {
 
                 {/* Race Filter */}
                 <Collapsible open={isRaceOpen} onOpenChange={setIsRaceOpen}>
-                  <CollapsibleTrigger className="flex items-center justify-between w-full p-3 rounded-md bg-white/5 hover:bg-white/10 transition-colors">
-                    <span className="text-sm font-medium text-white/90">Race</span>
-                    <ChevronDown className={`h-4 w-4 text-white/60 transition-transform ${isRaceOpen ? 'rotate-180' : ''}`} />
+                  <CollapsibleTrigger className="flex items-center justify-between w-full p-3 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all duration-200">
+                    <div className="flex items-center gap-2">
+                      <Users className="w-4 h-4 text-white/70" />
+                      <span className="text-sm font-medium text-white/90">Race</span>
+                    </div>
+                    <ChevronDown className={`h-4 w-4 text-white/60 transition-transform duration-200 ${isRaceOpen ? 'rotate-180' : ''}`} />
                   </CollapsibleTrigger>
                   <CollapsibleContent className="pt-3 px-2">
                     <RadioGroup value={selectedRace} onValueChange={setSelectedRace} className="space-y-2">
@@ -205,9 +210,12 @@ export default function Home() {
 
                 {/* Morality Filter */}
                 <Collapsible open={isMoralityOpen} onOpenChange={setIsMoralityOpen}>
-                  <CollapsibleTrigger className="flex items-center justify-between w-full p-3 rounded-md bg-white/5 hover:bg-white/10 transition-colors">
-                    <span className="text-sm font-medium text-white/90">Morality</span>
-                    <ChevronDown className={`h-4 w-4 text-white/60 transition-transform ${isMoralityOpen ? 'rotate-180' : ''}`} />
+                  <CollapsibleTrigger className="flex items-center justify-between w-full p-3 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all duration-200">
+                    <div className="flex items-center gap-2">
+                      <Scale className="w-4 h-4 text-white/70" />
+                      <span className="text-sm font-medium text-white/90">Morality</span>
+                    </div>
+                    <ChevronDown className={`h-4 w-4 text-white/60 transition-transform duration-200 ${isMoralityOpen ? 'rotate-180' : ''}`} />
                   </CollapsibleTrigger>
                   <CollapsibleContent className="pt-3 px-2">
                     <RadioGroup value={selectedMorality} onValueChange={setSelectedMorality} className="space-y-2">
@@ -233,9 +241,12 @@ export default function Home() {
 
                 {/* Profession Filter */}
                 <Collapsible open={isProfessionOpen} onOpenChange={setIsProfessionOpen}>
-                  <CollapsibleTrigger className="flex items-center justify-between w-full p-3 rounded-md bg-white/5 hover:bg-white/10 transition-colors">
-                    <span className="text-sm font-medium text-white/90">Profession</span>
-                    <ChevronDown className={`h-4 w-4 text-white/60 transition-transform ${isProfessionOpen ? 'rotate-180' : ''}`} />
+                  <CollapsibleTrigger className="flex items-center justify-between w-full p-3 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all duration-200">
+                    <div className="flex items-center gap-2">
+                      <Briefcase className="w-4 h-4 text-white/70" />
+                      <span className="text-sm font-medium text-white/90">Profession</span>
+                    </div>
+                    <ChevronDown className={`h-4 w-4 text-white/60 transition-transform duration-200 ${isProfessionOpen ? 'rotate-180' : ''}`} />
                   </CollapsibleTrigger>
                   <CollapsibleContent className="pt-3 px-2">
                     <RadioGroup value={selectedProfession} onValueChange={setSelectedProfession} className="space-y-2">
