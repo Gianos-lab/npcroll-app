@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/select";
 import { InfoTooltip } from "@/components/info-tooltip";
 import { Info } from "lucide-react";
+import { NpcDetailPanel } from "@/components/npc-detail-panel";
 
 export default function Home() {
   const [isPackExpanded, setIsPackExpanded] = useState(false);
@@ -190,41 +191,21 @@ export default function Home() {
           </aside>
 
           {/* RIGHT COLUMN */}
-          <section className="flex-1 min-w-0">
-            {/* MAIN AREA - Destra */}
-            <div className="flex-1 flex items-start justify-center pt-12">
-              <Card className="glass-card max-w-2xl w-full">
-                <CardHeader>
-                  <CardTitle className="text-3xl font-display">Tamley Duskpot</CardTitle>
-                  <p className="text-lg text-white/80 mt-1">Halfling Farmer (Evil)</p>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                  {/* Quote */}
-                  <div className="bg-white/5 border-l-4 border-teal-400 p-4 rounded">
-                    <p className="text-white/90 italic">"Oh, what a shame about your beans this year..."</p>
-                  </div>
-
-                  {/* Action Buttons */}
-                  <div className="flex flex-wrap gap-3">
-                    <Button variant="outline" className="glass-select">
-                      Hook
-                    </Button>
-                    <Button variant="outline" className="glass-select">
-                      Rumor
-                    </Button>
-                    <Button variant="outline" className="glass-select">
-                      Copy
-                    </Button>
-                  </div>
-
-                  {/* Helper Text */}
-                  <div className="text-center pt-4 border-t border-white/20">
-                    <p className="text-white/60 text-sm">← Click Generate for yours</p>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          </section>
+          <NpcDetailPanel
+            name="Tamley Duskpot"
+            race="Halfling"
+            profession="Farmer"
+            morality="Evil"
+            description="A stout halfling with sun-darkened skin and a perpetual half-smile. He tends his modest patch of land with obsessive care, but whispers in the village suggest his crops thrive a little too well—especially when his neighbors' fail."
+            look="Weather-beaten face, calloused hands, and a straw hat that never leaves his head. His overalls are always spotless despite his trade."
+            personality="Outwardly jovial and helpful, but his eyes never quite match his smile. He hoards grudges like seeds and plants them with equal patience."
+            history="Arrived in the village a decade ago after 'unfortunate circumstances' in his previous home. No one knows the details, and Tamley isn't telling."
+            voice="Soft and sing-song, with an unsettling habit of humming while he works. His accent is hard to place."
+            hook="Tamley approaches the party with a 'small favor': he needs someone to deliver a sealed package to a farm three villages over. He'll pay well, but insists they must not open it under any circumstances."
+            rumor="They say Tamley's previous neighbor died after a bitter dispute over a fence line. The official story was 'natural causes,' but the body was never found."
+            line1="Oh, what a shame about your beans this year... Mine are coming in just fine, though. Funny how that works."
+            line2="I'd invite you in for tea, but I'm afraid I just can't trust strangers. You understand."
+          />
         </div>
       </main>
 
