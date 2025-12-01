@@ -210,7 +210,7 @@ Voice: ${voice}
 AT THE TABLE
 
 Motivation: ${motivation}
-Rumor: ${rumor}
+Rumor: "${rumor}"
 
 Lines:
 • "${line1}"
@@ -390,8 +390,8 @@ Lines:
               <p className="text-[10px] font-semibold tracking-[0.14em] text-[#2B7A78] uppercase mb-2 pl-2">
                 Rumor
               </p>
-              <p className="text-[13px] text-[#FEFFFF]/80 leading-relaxed pl-2">
-                {rumor}
+              <p className="text-[13px] text-[#FEFFFF]/80 italic leading-relaxed pl-2">
+                &ldquo;{rumor}&rdquo;
               </p>
             </div>
 
