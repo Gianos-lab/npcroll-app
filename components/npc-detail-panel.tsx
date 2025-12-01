@@ -238,8 +238,7 @@ Lines:
       }
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
-    } catch (err) {
-      console.error('Failed to copy:', err);
+    } catch {
       // Try fallback even if modern API fails
       try {
         const textArea = document.createElement('textarea');
@@ -254,8 +253,8 @@ Lines:
         textArea.remove();
         setCopied(true);
         setTimeout(() => setCopied(false), 2000);
-      } catch (fallbackErr) {
-        console.error('Fallback copy also failed:', fallbackErr);
+      } catch {
+        // Copy failed silently - user can try again
       }
     }
   };

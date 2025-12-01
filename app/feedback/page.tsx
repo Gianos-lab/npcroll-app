@@ -21,8 +21,8 @@ export default function FeedbackPage() {
         body: formData,
       });
       setIsSubmitted(true);
-    } catch (error) {
-      console.error("Failed to submit feedback:", error);
+    } catch {
+      // Submission failed silently - form will not show success state
     } finally {
       setIsSubmitting(false);
     }
@@ -92,6 +92,8 @@ export default function FeedbackPage() {
               <form onSubmit={handleSubmit} className="space-y-5">
                 <input type="hidden" name="_captcha" value="false" />
                 <input type="hidden" name="_subject" value="[NPCRoll] New feedback received" />
+                {/* Honeypot anti-spam - bots fill this, humans don't see it */}
+                <input type="text" name="_honey" className="hidden" tabIndex={-1} autoComplete="off" />
 
                 {/* What's on your mind */}
                 <div>

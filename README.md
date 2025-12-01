@@ -48,17 +48,21 @@ Visit [http://localhost:3000](http://localhost:3000)
 
 ```
 npcroll-app/
-├── app/                    # Next.js app directory (pages, layouts, routes)
+├── app/                    # Next.js app directory (pages, API routes, layouts)
+│   ├── api/               # API endpoints
+│   ├── feedback/          # Feedback page
+│   ├── legal/             # Legal/privacy page
+│   └── roadmap/           # Roadmap page
 ├── components/             # React components
-│   ├── ui/                # Reusable UI components (shadcn)
+│   ├── ui/                # Reusable UI components (shadcn/Radix)
 │   └── ...                # Feature components
 ├── lib/                    # Utilities and shared logic
-│   ├── api/               # API client functions
-│   └── utils/             # Helper functions
-├── public/                 # Static assets (images, icons, etc.)
-├── data/                   # NPC data (JSON files)
+│   ├── npcRepository.ts   # NPC data access layer
+│   ├── types.ts           # TypeScript types
+│   └── utils.ts           # Helper functions
 ├── docs/                   # Public documentation
-└── package.json           # Project dependencies and scripts
+├── public/                 # Static assets (images, icons)
+└── scripts/                # Build utilities
 ```
 
 ---
@@ -78,11 +82,13 @@ See [docs/README.md](docs/README.md) for full design guidelines.
 
 ## 🛠️ Tech Stack
 
-- **Next.js 15** (App Router)
+- **Next.js 16** (App Router, Turbopack)
 - **TypeScript**
 - **React 19**
 - **Tailwind CSS**
 - **shadcn/ui** components
+- **Radix UI** primitives
+- **Framer Motion** (animations)
 - **Sentry** (error tracking)
 - **Vercel** (deployment)
 

@@ -9,7 +9,6 @@ export type Npc = {
   personality: string;
   history: string;
   motivation: string;
-  hooks?: string[];
   rumor?: string;
   voice?: string;
   lines: string[];

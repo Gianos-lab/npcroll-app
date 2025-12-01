@@ -17,3 +17,6 @@ Sentry.init({
   // Keep error logging
   enableLogs: true,
 });
+
+// Required for Next.js navigation instrumentation
+export const onRouterTransitionStart = Sentry.captureRouterTransitionStart;

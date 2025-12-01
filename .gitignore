@@ -49,11 +49,8 @@ next-env.d.ts
 docs_internal/
 factory/
 
-# Data files (only commit final production files)
-data/pack01/batch_01/
-data/pack01/pack01_npcs.json
-data/pack01/pack01_rumors.json
-data/pack01/event_seeds.json
+# Data files (private - NPC database)
+data/
 *.bak
 
 # Backup and temporary files
@@ -62,6 +59,10 @@ data/pack01/event_seeds.json
 *-broken.*
 *-clean.*
 *-temp.*
+temp_*
+CLEANUP_REPORT.md
+trace.log
+*.log
 
 # Feedback data (user submissions - sensitive)
 app/feedback/data/

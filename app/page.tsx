@@ -105,8 +105,8 @@ export default function Home() {
         setShowMobileToast(true);
         setTimeout(() => setShowMobileToast(false), 3000);
       }
-    } catch (error) {
-      console.error('Failed to fetch NPC:', error);
+    } catch {
+      // Error handled silently - user can retry
     } finally {
       setIsLoading(false);
     }

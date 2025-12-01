@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://npcroll.com"),
   title: "NPCRoll — Generate NPCs for Your 5e Adventures",
   description: "Generate curated NPCs for your 5e campaign in seconds. Pick your filters, roll the dice, and summon a unique character with backstory, voice, hooks, and motivations.",
   icons: {
