@@ -119,17 +119,23 @@ cd npcroll-app
 ```
 
 ### 2. Install dependencies
+```bash
 npm install
+```
 
 ### 3. Environment variables
 Copy the example env file:
+```bash
 cp .env.example .env.local
+```
 
 Then fill in any required values listed in .env.example.
-.env.local is not committed to Git and stays on your machine.
+`.env.local` is not committed to Git and stays on your machine.
 
 ### 4. Run the development server
+```bash
 npm run dev
+```
 
 The app will be available at:
 http://localhost:3000
