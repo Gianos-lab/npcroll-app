@@ -255,8 +255,8 @@ export default function RoadmapPage() {
                             textAlign: "left",        // allineato a sinistra
                         }}
                     >
-                        NPCRoll is an ongoing effort to make 5e campaigns easier, richer, and funnier to play.
-                        This page outlines what’s released, what’s currently in development, and what’s planned
+                        NPCRoll is an ongoing effort to make fantasy campaigns easier, richer, and funnier to play.
+                        This page outlines what's released, what's currently in development, and what's planned
                         for upcoming updates.
                     </p>
 
@@ -341,8 +341,8 @@ export default function RoadmapPage() {
                                     </div>
                                     <p style={pBody}>
                                         This pack brings in the most hated low-level troublemakers
-                                        in any 5e campaign: goblins, hobgoblins, and bugbears. From
-                                        “totally trustworthy” goblin merchants to hobgoblin
+                                        in any fantasy campaign: goblins, hobgoblins, and bugbears. From
+                                        "totally trustworthy" goblin merchants to hobgoblin
                                         officers who run tighter schedules than most kingdoms, this
                                         pack covers the full range of goblinoid nonsense.
                                     </p>
