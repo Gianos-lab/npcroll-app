@@ -59,6 +59,7 @@ export default function Home() {
   const [isProfessionOpen, setIsProfessionOpen] = useState(true);
   
   const [currentNpc, setCurrentNpc] = useState<Npc | null>(null);
+  const [isInitializing, setIsInitializing] = useState(true); // Hide empty state during initial load
   
   // Mobile toast state
   const [showMobileToast, setShowMobileToast] = useState(false);
@@ -88,6 +89,8 @@ export default function Home() {
         }
       } catch {
         // Silent fail - user can roll manually
+      } finally {
+        setIsInitializing(false);
       }
     };
     preloadNpc();
@@ -352,7 +355,7 @@ This early build holds only one pack — but worry not, more are brewing.</span>
 
           {/* RIGHT COLUMN - fills remaining space */}
           <div className="w-full flex-1 min-w-0">
-            {currentNpc ? (
+            {isInitializing ? null : currentNpc ? (
               <NpcDetailPanel {...currentNpc} onRollAnother={handleRollNpc} onClear={() => setCurrentNpc(null)} />
             ) : (
               <NpcEmptyState />
