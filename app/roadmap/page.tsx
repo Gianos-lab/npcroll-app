@@ -220,7 +220,7 @@ export default function RoadmapPage() {
                             }}
                         >
                             <img
-                                src="/logo.svg"
+                                src="/logo_white.png"
                                 alt="NPCRoll Logo"
                                 style={{
                                     width: "72px",

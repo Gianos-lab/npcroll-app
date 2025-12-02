@@ -16,7 +16,7 @@ export default function LegalPage() {
       <header className="bg-white/10 backdrop-blur-md border-b border-white/20 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 py-2 flex items-center justify-between" style={{ minHeight: '56px' }}>
           <Link href="/" className="flex items-center gap-2">
-            <img src="/logo_nav.svg" alt="NPCRoll Logo" className="w-16 h-16" />
+            <img src="/logo_white.png" alt="NPCRoll Logo" className="w-16 h-16" />
           </Link>
           <nav className="flex items-center gap-6">
             <Link 

@@ -42,7 +42,7 @@ export default function FeedbackPage() {
       <header className="bg-white/10 backdrop-blur-md border-b border-white/20 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 py-2 flex items-center justify-between" style={{ minHeight: '56px' }}>
           <Link href="/" className="flex items-center gap-2">
-            <img src="/logo_nav.svg" alt="NPCRoll Logo" className="w-16 h-16" />
+            <img src="/logo_white.png" alt="NPCRoll Logo" className="w-16 h-16" />
           </Link>
           <nav className="flex items-center gap-6">
             <Link 
@@ -63,6 +63,7 @@ export default function FeedbackPage() {
           <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-xl p-6 sm:p-8">
             {/* Header */}
             <div className="text-center mb-8">
+              <img src="/logo_white.png" alt="NPCRoll" className="w-20 h-20 mx-auto mb-4" />
               <h1 className="text-2xl sm:text-3xl font-bold text-white font-display mb-3">
                 Speak, Adventurer!
               </h1>
