@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-import { motion } from "framer-motion";
 import { BorderBeam } from "@/components/ui/border-beam";
 import { Dices, Copy, Check, RotateCcw, X } from "lucide-react";
 import { trackCopyAction, trackRollAnotherClick } from "@/lib/analytics";
@@ -268,36 +267,8 @@ Lines:
     onRollAnother?.();
   };
 
-  // Animation variants for staggered children
-  const containerVariants = {
-    hidden: { opacity: 0, y: 12 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.25,
-        ease: [0.25, 0.1, 0.25, 1] as const, // easeOut cubic-bezier
-        staggerChildren: 0.08,
-      },
-    },
-  };
-
-  const childVariants = {
-    hidden: { opacity: 0, y: 8 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.2, ease: [0.25, 0.1, 0.25, 1] as const },
-    },
-  };
-
   return (
-    <motion.section
-      key={name}
-      initial="hidden"
-      animate="visible"
-      variants={containerVariants}
-    >
+    <section>
       {/* Border beam wrapper - frames the entire NPC panel */}
       <div className="relative">
         <BorderBeam 
@@ -310,7 +281,7 @@ Lines:
         <div className="relative z-10 flex flex-col gap-5 rounded-xl border border-white/10 bg-[#17252A] px-5 py-6 shadow-[0_8_60px_rgba(0,0,0,0.6)] backdrop-blur-md sm:px-6 sm:py-7 md:gap-6 md:px-7">
         
         {/* 1) HEADER */}
-        <motion.header variants={childVariants} className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+        <header className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
           <div>
             <h2 className="mb-1 font-display text-2xl font-bold text-[#FEFFFF] sm:text-[28px] md:text-3xl">
               {name}
@@ -365,10 +336,10 @@ Lines:
               </button>
             )}
           </div>
-        </motion.header>
+        </header>
 
         {/* 2) SECTION: OVERVIEW */}
-        <motion.section variants={childVariants}>
+        <section>
           <h3 className="text-[11px] font-semibold tracking-[0.14em] text-[#DEF2F1]/50 uppercase mb-3">
             Overview
           </h3>
@@ -384,10 +355,10 @@ Lines:
               </p>
             )}
           </div>
-        </motion.section>
+        </section>
 
         {/* 3) SECTION: WHAT DEFINES THEM */}
-        <motion.section variants={childVariants}>
+        <section>
           <h3 className="text-[11px] font-semibold tracking-[0.14em] text-[#DEF2F1]/50 uppercase mb-3">
             What defines them
           </h3>
@@ -419,10 +390,10 @@ Lines:
               </div>
             </div>
           </div>
-        </motion.section>
+        </section>
 
         {/* 4) SECTION: AT THE TABLE */}
-        <motion.section variants={childVariants}>
+        <section>
           <h3 className="text-[11px] font-semibold tracking-[0.14em] text-[#DEF2F1]/50 uppercase mb-3">
             At the table
           </h3>
@@ -474,9 +445,9 @@ Lines:
               </div>
             </div>
           </div>
-        </motion.section>
+        </section>
         </div>
       </div>
-    </motion.section>
+    </section>
   );
 }

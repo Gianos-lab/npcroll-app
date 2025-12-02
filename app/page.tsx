@@ -12,7 +12,7 @@ import {
 import { ChevronDown, Users, Scale, Briefcase, Info, Sparkles } from "lucide-react";
 import ExternalLinkButton from "@/components/animata/button/external-link-button";
 import { InfoTooltip } from "@/components/info-tooltip";
-import { NpcDetailPanel, NpcEmptyState, NpcLoadingState } from "@/components/npc-detail-panel";
+import { NpcDetailPanel, NpcEmptyState } from "@/components/npc-detail-panel";
 import { motion, AnimatePresence } from "framer-motion";
 import { fetchRandomNpc } from "./actions";
 import { trackCtaClick, trackNpcGenerated, trackFilterChange } from "@/lib/analytics";
@@ -57,7 +57,6 @@ export default function Home() {
   const [isRaceOpen, setIsRaceOpen] = useState(true);
   const [isMoralityOpen, setIsMoralityOpen] = useState(true);
   const [isProfessionOpen, setIsProfessionOpen] = useState(true);
-  const [isLoading, setIsLoading] = useState(true); // Start loading for initial NPC
   
   const [currentNpc, setCurrentNpc] = useState<Npc | null>(null);
   
@@ -89,8 +88,6 @@ export default function Home() {
         }
       } catch {
         // Silent fail - user can roll manually
-      } finally {
-        setIsLoading(false);
       }
     };
     preloadNpc();
@@ -109,7 +106,6 @@ export default function Home() {
     // Track CTA click
     trackCtaClick('hero_button');
     
-    setIsLoading(true);
     try {
       const npc = await fetchNpc({
         race: selectedRace,
@@ -129,8 +125,6 @@ export default function Home() {
       }
     } catch {
       // Error handled silently - user can retry
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -178,16 +172,16 @@ export default function Home() {
       </header>
 
       {/* Main Content */}
-      <main className={`flex-1 py-8 ${!currentNpc && !isLoading ? 'flex items-center' : ''}`}>
+      <main className={`flex-1 py-8 ${!currentNpc ? 'flex items-center' : ''}`}>
         <div
           className={`mx-auto flex w-full max-w-7xl flex-col gap-6 px-4 sm:px-6 md:flex-row md:gap-10 ${
-            !currentNpc && !isLoading ? 'md:items-stretch' : 'items-start'
+            !currentNpc ? 'md:items-stretch' : 'items-start'
           }`}
         >
           {/* LEFT COLUMN - fixed width */}
           <aside
             className={`w-full flex-shrink-0 ${
-              !currentNpc && !isLoading ? 'flex' : ''
+              !currentNpc ? 'flex' : ''
             } md:w-[360px] lg:w-[420px]`}
           >
             {/* Try it yourself Card */}
@@ -245,14 +239,13 @@ This early build holds only one pack — but worry not, more are brewing.</span>
               <div className="flex justify-center">
                 <button 
                   onClick={handleRollNpc}
-                  disabled={isLoading}
-                  className="group relative overflow-hidden rounded-lg bg-[#D4AF6A] px-10 py-4 transition-all duration-300 shadow-lg shadow-[#D4AF6A]/40 hover:shadow-[#D4AF6A]/60 hover:shadow-xl hover:scale-[1.02] disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100"
+                  className="group relative overflow-hidden rounded-lg bg-[#D4AF6A] px-10 py-4 transition-all duration-300 shadow-lg shadow-[#D4AF6A]/40 hover:shadow-[#D4AF6A]/60 hover:shadow-xl hover:scale-[1.02]"
                 >
                   <span className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
                   <span className="absolute bottom-0 left-0 h-48 w-full origin-bottom translate-y-full transform overflow-hidden rounded-lg bg-white/20 transition-all duration-300 ease-out group-hover:translate-y-14"></span>
                   <div className="relative flex items-center justify-center gap-3">
-                    <img src="/roll.svg" alt="dice" className={`w-8 h-8 transition-transform duration-300 ${isLoading ? 'animate-spin' : 'group-hover:rotate-12'}`} style={isLoading ? { animationDuration: '1s' } : undefined} />
-                    <span className="font-display font-bold text-lg text-slate-900">{isLoading ? 'ROLLING...' : 'ROLL A CURATED NPC'}</span>
+                    <img src="/roll.svg" alt="dice" className="w-8 h-8 transition-transform duration-300 group-hover:rotate-12" />
+                    <span className="font-display font-bold text-lg text-slate-900">ROLL A CURATED NPC</span>
                   </div>
                 </button>
               </div>
@@ -359,9 +352,7 @@ This early build holds only one pack — but worry not, more are brewing.</span>
 
           {/* RIGHT COLUMN - fills remaining space */}
           <div className="w-full flex-1 min-w-0">
-            {isLoading ? (
-              <NpcLoadingState />
-            ) : currentNpc ? (
+            {currentNpc ? (
               <NpcDetailPanel {...currentNpc} onRollAnother={handleRollNpc} onClear={() => setCurrentNpc(null)} />
             ) : (
               <NpcEmptyState />
