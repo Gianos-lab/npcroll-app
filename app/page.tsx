@@ -35,10 +35,8 @@ type Npc = {
   line2: string;
 };
 
-// Fetch NPC with minimum delay for UX
+// Fetch NPC - instant response, no artificial delays
 async function fetchNpc(filters?: { race?: string; morality?: string; profession?: string }): Promise<Npc> {
-  const start = Date.now();
-  
   const npcFilters = {
     race: filters?.race && filters.race !== 'all-races' ? filters.race : null,
     morality: filters?.morality && filters.morality !== 'all-moralities' ? filters.morality : null,
@@ -49,15 +47,6 @@ async function fetchNpc(filters?: { race?: string; morality?: string; profession
   
   if (!npc) {
     throw new Error('Failed to fetch NPC');
-  }
-
-  // Ensure minimum delay for better UX
-  const MIN_DELAY_MS = 2500;
-  const elapsed = Date.now() - start;
-  if (elapsed < MIN_DELAY_MS) {
-    await new Promise((resolve) =>
-      setTimeout(resolve, MIN_DELAY_MS - elapsed)
-    );
   }
 
   return npc as Npc;
