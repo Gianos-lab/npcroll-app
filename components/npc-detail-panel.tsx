@@ -4,6 +4,7 @@ import * as React from "react";
 import { motion } from "framer-motion";
 import { BorderBeam } from "@/components/ui/border-beam";
 import { Dices, Copy, Check, RotateCcw, X } from "lucide-react";
+import { trackCopyAction, trackRollAnotherClick } from "@/lib/analytics";
 
 const LOADING_MESSAGES = [
   "Consulting the ancient grimoire…",
@@ -237,6 +238,7 @@ Lines:
         textArea.remove();
       }
       setCopied(true);
+      trackCopyAction('full_npc');
       setTimeout(() => setCopied(false), 2000);
     } catch {
       // Try fallback even if modern API fails
@@ -252,11 +254,18 @@ Lines:
         document.execCommand('copy');
         textArea.remove();
         setCopied(true);
+        trackCopyAction('full_npc');
         setTimeout(() => setCopied(false), 2000);
       } catch {
         // Copy failed silently - user can try again
       }
     }
+  };
+
+  // Handle Roll Another with tracking
+  const handleRollAnother = () => {
+    trackRollAnotherClick('npc_card_button');
+    onRollAnother?.();
   };
 
   // Animation variants for staggered children
@@ -335,7 +344,7 @@ Lines:
             {/* Roll Another */}
             {onRollAnother && (
               <button
-                onClick={onRollAnother}
+                onClick={handleRollAnother}
                 className="flex min-h-[40px] w-full items-center justify-center gap-1.5 rounded-lg border border-[#3AAFA9]/30 bg-[#3AAFA9]/20 px-3 py-2 text-xs font-medium text-[#3AAFA9] transition-all duration-200 hover:border-[#3AAFA9]/50 hover:bg-[#3AAFA9]/30 hover:text-[#FEFFFF] touch-manipulation sm:w-auto"
                 title="Roll another NPC"
               >

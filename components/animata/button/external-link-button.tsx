@@ -1,4 +1,5 @@
 import { ArrowTopRightIcon } from "@radix-ui/react-icons";
+import { trackFeedbackClick } from "@/lib/analytics";
 
 interface ButtonTitleProps {
   /**
@@ -12,8 +13,18 @@ interface ButtonTitleProps {
 }
 
 export default function ExternalLinkButton({ text = "Open Link", href = "/feedback" }: ButtonTitleProps) {
+  const handleClick = () => {
+    if (href === "/feedback") {
+      trackFeedbackClick('header');
+    }
+  };
+
   return (
-    <a href={href} className="text-md group inline-flex items-center justify-center gap-1 rounded-md bg-[#3AAFA9] px-6 py-3 text-[#17252A] hover:bg-[#2B7A78] hover:cursor-pointer font-display tracking-wider">
+    <a 
+      href={href} 
+      onClick={handleClick}
+      className="text-md group inline-flex items-center justify-center gap-1 rounded-md bg-[#3AAFA9] px-6 py-3 text-[#17252A] hover:bg-[#2B7A78] hover:cursor-pointer font-display tracking-wider"
+    >
       <span className="leading-none">{text}</span>
       <ArrowTopRightIcon
         height={20}

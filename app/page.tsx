@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Separator } from "@/components/ui/separator";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
@@ -15,6 +15,7 @@ import { InfoTooltip } from "@/components/info-tooltip";
 import { NpcDetailPanel, NpcEmptyState, NpcLoadingState } from "@/components/npc-detail-panel";
 import { motion, AnimatePresence } from "framer-motion";
 import { fetchRandomNpc } from "./actions";
+import { trackCtaClick, trackNpcGenerated, trackFilterChange } from "@/lib/analytics";
 
 // NPC type for the fetched data
 type Npc = {
@@ -67,7 +68,7 @@ export default function Home() {
   const [isRaceOpen, setIsRaceOpen] = useState(true);
   const [isMoralityOpen, setIsMoralityOpen] = useState(true);
   const [isProfessionOpen, setIsProfessionOpen] = useState(true);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true); // Start loading for initial NPC
   
   const [currentNpc, setCurrentNpc] = useState<Npc | null>(null);
   
@@ -83,13 +84,42 @@ export default function Home() {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
   
+  // Pre-load an NPC on first visit (no artificial delay for initial load)
+  useEffect(() => {
+    const preloadNpc = async () => {
+      try {
+        const npc = await fetchRandomNpc({
+          race: null,
+          morality: null,
+          profession: null,
+        });
+        if (npc) {
+          setCurrentNpc(npc as Npc);
+          // Track initial preload as roll 0
+          trackNpcGenerated(0);
+        }
+      } catch {
+        // Silent fail - user can roll manually
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    preloadNpc();
+  }, []);
+  
   // Filter states
   const [selectedRace, setSelectedRace] = useState("all-races");
   const [selectedMorality, setSelectedMorality] = useState("all-moralities");
   const [selectedProfession, setSelectedProfession] = useState("all-professions");
+  
+  // Roll counter for analytics
+  const rollCountRef = useRef(0);
 
   // Handle roll NPC
   const handleRollNpc = async () => {
+    // Track CTA click
+    trackCtaClick('hero_button');
+    
     setIsLoading(true);
     try {
       const npc = await fetchNpc({
@@ -98,6 +128,10 @@ export default function Home() {
         profession: selectedProfession,
       });
       setCurrentNpc(npc);
+      
+      // Track NPC generated
+      rollCountRef.current += 1;
+      trackNpcGenerated(rollCountRef.current);
       
       // Show toast on mobile
       if (isMobile) {
@@ -108,6 +142,28 @@ export default function Home() {
       // Error handled silently - user can retry
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  // Filter change handlers with analytics
+  const handleRaceChange = (value: string) => {
+    setSelectedRace(value);
+    if (value !== 'all-races') {
+      trackFilterChange('race', value);
+    }
+  };
+
+  const handleMoralityChange = (value: string) => {
+    setSelectedMorality(value);
+    if (value !== 'all-moralities') {
+      trackFilterChange('morality', value);
+    }
+  };
+
+  const handleProfessionChange = (value: string) => {
+    setSelectedProfession(value);
+    if (value !== 'all-professions') {
+      trackFilterChange('profession', value);
     }
   };
 
@@ -124,7 +180,7 @@ export default function Home() {
       <header className="bg-white/10 backdrop-blur-md border-b border-white/20 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 py-2 flex items-center justify-between" style={{ minHeight: '56px' }}>
           <div className="flex items-center gap-2">
-            <img src="/logo_nav.svg" alt="NPCRoll Logo" className="w-16 h-16" />
+            <img src="/logo_white.png" alt="NPCRoll Logo" className="w-16 h-16" />
           </div>
           <nav className="flex items-center gap-6">
             <ExternalLinkButton text="Feedback" />
@@ -149,7 +205,8 @@ export default function Home() {
             <div className="w-full space-y-5 rounded-xl border border-white/20 bg-white/10 p-5 sm:p-6 backdrop-blur-md">
               {/* Hero Text */}
               <div className="text-center">
-                <h1 className="font-display text-2xl font-bold text-white sm:text-3xl">Need an NPC? Roll one</h1>
+                <h1 className="font-display text-xl font-bold text-white sm:text-2xl md:text-3xl leading-tight">Roll Fully-Written NPCs, Not Just Names.</h1>
+                <p className="mt-2 text-sm text-white/70 sm:text-base">Instantly generate system-agnostic characters complete with unique personalities, detailed motivations, and plot-driving secrets.</p>
               </div>
 
               {/* Current Pack Header - Desktop: with tooltip, Mobile: with static text */}
@@ -206,7 +263,7 @@ This early build holds only one pack — but worry not, more are brewing.</span>
                   <span className="absolute bottom-0 left-0 h-48 w-full origin-bottom translate-y-full transform overflow-hidden rounded-lg bg-white/20 transition-all duration-300 ease-out group-hover:translate-y-14"></span>
                   <div className="relative flex items-center justify-center gap-3">
                     <img src="/roll.svg" alt="dice" className={`w-8 h-8 transition-transform duration-300 ${isLoading ? 'animate-spin' : 'group-hover:rotate-12'}`} style={isLoading ? { animationDuration: '1s' } : undefined} />
-                    <span className="font-display font-bold text-lg text-slate-900">{isLoading ? 'ROLLING...' : 'ROLL NPC'}</span>
+                    <span className="font-display font-bold text-lg text-slate-900">{isLoading ? 'ROLLING...' : 'ROLL A CURATED NPC'}</span>
                   </div>
                 </button>
               </div>
@@ -225,7 +282,7 @@ This early build holds only one pack — but worry not, more are brewing.</span>
                     <ChevronDown className={`h-4 w-4 text-white/60 transition-transform duration-200 ${isRaceOpen ? 'rotate-180' : ''}`} />
                   </CollapsibleTrigger>
                   <CollapsibleContent className="px-1 pt-3 sm:px-2">
-                    <RadioGroup value={selectedRace} onValueChange={setSelectedRace} className="space-y-2">
+                    <RadioGroup value={selectedRace} onValueChange={handleRaceChange} className="space-y-2">
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem value="all-races" id="race-all" className="border-white/40 text-teal-400" />
                         <Label htmlFor="race-all" className="text-sm text-white/80 cursor-pointer">All Races</Label>
@@ -252,7 +309,7 @@ This early build holds only one pack — but worry not, more are brewing.</span>
                     <ChevronDown className={`h-4 w-4 text-white/60 transition-transform duration-200 ${isMoralityOpen ? 'rotate-180' : ''}`} />
                   </CollapsibleTrigger>
                   <CollapsibleContent className="px-1 pt-3 sm:px-2">
-                    <RadioGroup value={selectedMorality} onValueChange={setSelectedMorality} className="space-y-2">
+                    <RadioGroup value={selectedMorality} onValueChange={handleMoralityChange} className="space-y-2">
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem value="all-moralities" id="morality-all" className="border-white/40 text-teal-400" />
                         <Label htmlFor="morality-all" className="text-sm text-white/80 cursor-pointer">All</Label>
@@ -283,7 +340,7 @@ This early build holds only one pack — but worry not, more are brewing.</span>
                     <ChevronDown className={`h-4 w-4 text-white/60 transition-transform duration-200 ${isProfessionOpen ? 'rotate-180' : ''}`} />
                   </CollapsibleTrigger>
                   <CollapsibleContent className="px-1 pt-3 sm:px-2">
-                    <RadioGroup value={selectedProfession} onValueChange={setSelectedProfession} className="space-y-2">
+                    <RadioGroup value={selectedProfession} onValueChange={handleProfessionChange} className="space-y-2">
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem value="all-professions" id="prof-all" className="border-white/40 text-teal-400" />
                         <Label htmlFor="prof-all" className="text-sm text-white/80 cursor-pointer">All Professions</Label>
