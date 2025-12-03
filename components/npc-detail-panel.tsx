@@ -187,10 +187,14 @@ export function NpcDetailPanel({
   onClear,
 }: NpcDetailPanelProps) {
   const [copied, setCopied] = React.useState(false);
+  const [hideName, setHideName] = React.useState(false);
+
+  // Display name: use placeholder when hidden
+  const displayName = hideName ? "[Name] [Surname]" : name;
 
   const copyToClipboard = async () => {
     const formattedText = `
-${name}
+${displayName}
 ${race} · ${profession} · ${morality}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -284,57 +288,80 @@ Lines:
         <header className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
           <div>
             <h2 className="mb-1 font-display text-2xl font-bold text-[#FEFFFF] sm:text-[28px] md:text-3xl">
-              {name}
+              {hideName ? (
+                <span className="italic text-[#DEF2F1]/50 font-normal">[Name] [Surname]</span>
+              ) : (
+                name
+              )}
             </h2>
             <p className="text-sm text-[#DEF2F1]/70">
               {race} · {profession} · {morality}
             </p>
           </div>
           
-          {/* Action buttons */}
-          <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center">
-            {/* Copy to Clipboard */}
-            <button
-              onClick={copyToClipboard}
-              className="flex min-h-[40px] w-full items-center justify-center gap-1.5 rounded-lg border border-white/10 bg-white/10 px-3 py-2 text-xs font-medium text-[#DEF2F1]/80 transition-all duration-200 hover:border-white/20 hover:bg-white/20 hover:text-[#FEFFFF] touch-manipulation sm:w-auto"
-              title="Copy NPC to clipboard"
-            >
-              {copied ? (
-                <>
-                  <Check className="w-3.5 h-3.5 text-[#3AAFA9]" />
-                  <span className="text-[#3AAFA9]">Copied!</span>
-                </>
-              ) : (
-                <>
-                  <Copy className="w-3.5 h-3.5" />
-                  <span>Copy</span>
-                </>
+          {/* Action buttons + Hide Name toggle */}
+          <div className="flex flex-col gap-2">
+            {/* Button row: Copy NPC (primary) | Roll Another | Clear */}
+            <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center">
+              {/* Copy NPC - PRIMARY action with strong teal */}
+              <button
+                onClick={copyToClipboard}
+                className="flex min-h-[40px] w-full items-center justify-center gap-1.5 rounded-lg border border-[#3AAFA9]/50 bg-[#3AAFA9]/30 px-4 py-2 text-xs font-medium text-[#3AAFA9] transition-all duration-200 hover:border-[#3AAFA9]/70 hover:bg-[#3AAFA9]/40 hover:text-[#FEFFFF] touch-manipulation sm:w-auto"
+                title="Copy NPC to clipboard"
+              >
+                {copied ? (
+                  <>
+                    <Check className="w-3.5 h-3.5" />
+                    <span>Copied!</span>
+                  </>
+                ) : (
+                  <>
+                    <Copy className="w-3.5 h-3.5" />
+                    <span>Copy NPC</span>
+                  </>
+                )}
+              </button>
+              
+              {/* Roll Another - secondary */}
+              {onRollAnother && (
+                <button
+                  onClick={handleRollAnother}
+                  className="flex min-h-[40px] w-full items-center justify-center gap-1.5 rounded-lg border border-white/10 bg-white/10 px-3 py-2 text-xs font-medium text-[#DEF2F1]/80 transition-all duration-200 hover:border-white/20 hover:bg-white/20 hover:text-[#FEFFFF] touch-manipulation sm:w-auto"
+                  title="Roll another NPC"
+                >
+                  <RotateCcw className="w-3.5 h-3.5" />
+                  <span>Roll Another</span>
+                </button>
               )}
-            </button>
+              
+              {/* Clear - tertiary */}
+              {onClear && (
+                <button
+                  onClick={onClear}
+                  className="flex min-h-[40px] w-full items-center justify-center gap-1.5 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-xs font-medium text-[#DEF2F1]/50 transition-all duration-200 hover:border-white/20 hover:bg-white/10 hover:text-[#DEF2F1]/80 touch-manipulation sm:w-auto"
+                  title="Clear NPC"
+                >
+                  <X className="w-3.5 h-3.5" />
+                  <span>Clear</span>
+                </button>
+              )}
+            </div>
             
-            {/* Roll Another */}
-            {onRollAnother && (
-              <button
-                onClick={handleRollAnother}
-                className="flex min-h-[40px] w-full items-center justify-center gap-1.5 rounded-lg border border-[#3AAFA9]/30 bg-[#3AAFA9]/20 px-3 py-2 text-xs font-medium text-[#3AAFA9] transition-all duration-200 hover:border-[#3AAFA9]/50 hover:bg-[#3AAFA9]/30 hover:text-[#FEFFFF] touch-manipulation sm:w-auto"
-                title="Roll another NPC"
-              >
-                <RotateCcw className="w-3.5 h-3.5" />
-                <span>Roll Another</span>
-              </button>
-            )}
-            
-            {/* Clear */}
-            {onClear && (
-              <button
-                onClick={onClear}
-                className="flex min-h-[40px] w-full items-center justify-center gap-1.5 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-xs font-medium text-[#DEF2F1]/50 transition-all duration-200 hover:border-white/20 hover:bg-white/10 hover:text-[#DEF2F1]/80 touch-manipulation sm:w-auto"
-                title="Clear NPC"
-              >
-                <X className="w-3.5 h-3.5" />
-                <span>Clear</span>
-              </button>
-            )}
+            {/* Hide Name checkbox - below buttons */}
+            <label className="flex items-center gap-2 cursor-pointer group sm:self-start">
+              <input
+                type="checkbox"
+                checked={hideName}
+                onChange={(e) => setHideName(e.target.checked)}
+                className="sr-only peer"
+              />
+              <div className="w-4 h-4 rounded border border-white/20 bg-white/5 flex items-center justify-center transition-all peer-checked:border-[#3AAFA9]/50 peer-checked:bg-[#3AAFA9]/20 group-hover:border-white/30">
+                {hideName && <Check className="w-3 h-3 text-[#3AAFA9]" />}
+              </div>
+              <span className="text-xs text-[#DEF2F1]/50 group-hover:text-[#DEF2F1]/70 transition-colors">
+                Hide name (use my own)
+              </span>
+            </label>
           </div>
         </header>
 
